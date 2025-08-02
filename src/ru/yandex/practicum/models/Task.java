@@ -2,10 +2,10 @@ package ru.yandex.practicum.models;
 
 
 public class Task {
-    final int ID;
-    final String name;
+    private final int ID;
+    private final String name;
     String description; // писание может изменяться
-    TaskState state; // Статус должен изменяться
+    private TaskState state; // Статус должен изменяться
 
     public Task(int cID, String cName, String cDescription) {
         this.ID = cID;
@@ -20,7 +20,7 @@ public class Task {
         return this.state;
     }
 
-    public void updateState() {
+    void updateState() {
 
         if (this.state == TaskState.NEW) {
             this.state = TaskState.IN_PROGRESS;
@@ -36,7 +36,7 @@ public class Task {
     public String toString() {
 
         String result = "";
-        result = "Задача номер:" + this.ID + ", Наименование: '" + this.name
+        result = "Задача номер: [" + this.getID() + "], Наименование: '" + this.name
                 + "', Описание: '" + this.description + "' находится в статусе: '" + this.state + "'";
         return result;
     }

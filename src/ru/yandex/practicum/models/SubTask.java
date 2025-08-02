@@ -17,9 +17,9 @@ public class SubTask extends Task {
     public String toString() {
 
         String result = "";
-        result = "Подзадача номер:" + this.ID + ",Наименование: '" + this.name
-                + "', Описание '" + this.description + "' находится в статусе: '" + this.state
-                + "' ;Подзадача относится к эпику: '" + this.epicID + "'";
+        result = "Подзадача номер: [" + this.getID() + "], Наименование: '" + this.getName()
+                + "', Описание '" + this.description + "' находится в статусе: '" + this.getState()
+                + "'; Подзадача относится к эпику: [" + this.epicID + "]";
         return result;
     }
 }

@@ -5,9 +5,9 @@ import java.util.HashMap;
 public class TaskManager {
 
     static int elementID; // Сквозная нумерация задач
-    static HashMap<Integer, Task> taskList;
-    static HashMap<Integer, Epic> epicList;
-    static HashMap<Integer, SubTask> subTaskList;
+    private static HashMap<Integer, Task> taskList;
+    private static HashMap<Integer, Epic> epicList;
+    private static HashMap<Integer, SubTask> subTaskList;
 
     public TaskManager() {
         taskList = new HashMap<Integer, Task>();
@@ -34,13 +34,6 @@ public class TaskManager {
         return null;
     }
 
-    static SubTask getSubTaskByID(int mID) { //передаем именно SubTaskID
-
-        if (!subTaskList.isEmpty()) {
-            return subTaskList.get(mID);
-        }
-        return null;
-    }
 
     static Epic getEpicBySubtaskID(int mSubtaskID) {
 
@@ -68,22 +61,22 @@ public class TaskManager {
     }
 
     //Создание задач всех типов
-    public static void createEpic(Epic mEpic) {
+    public void createEpic(Epic mEpic) {
 
-        epicList.put(mEpic.ID, mEpic);
+        epicList.put(mEpic.getID(), mEpic);
     }
 
-    public static void createTask(Task task) {
+    public  void createTask(Task task) {
 
-        taskList.put(task.ID, task);
+        taskList.put(task.getID(), task);
     }
 
-    public static void createSubtask(int mEpicID, SubTask subTask) {
+    public  void createSubtask(int mEpicID, SubTask subTask) {
 
         Epic epic = getEpicByID(mEpicID);
         if (epic != null) {
-            subTaskList.put(subTask.ID, subTask);
-            epic.subTaskElements.add(subTask.ID);
+            subTaskList.put(subTask.getID(), subTask);
+            epic.subTaskElements.add(subTask.getID());
             epic.recountEpicState(subTaskList);
 
         } else {
@@ -93,7 +86,7 @@ public class TaskManager {
 
 
     // Удаление
-    static void deleteElement(int mID, String mType) {
+    public static void deleteElement(int mID, String mType) {
 
         switch (mType) {
             case "EPIC":
@@ -109,16 +102,18 @@ public class TaskManager {
                 if (taskList.containsKey(mID)) {
                     taskList.remove(mID);
                 } else {
-                    System.out.println("Передан неверный номер Задачи");
+                    System.out.println("Передан неверный номер Задачи: " + mID);
                 }
                 break;
             case "SUB_TASK":
 
                 if (subTaskList.containsKey(mID)) {
                     subTaskList.remove(mID);
-                    Epic epic = epicList.get(mID);
-                    epic.subTaskElements.remove(mID);
-                    epic.recountEpicState(subTaskList);
+                    Epic epic = getEpicBySubtaskID(mID);
+                    if (epic != null) {
+                        epic.subTaskElements.remove(Integer.valueOf(mID));
+                        epic.recountEpicState(subTaskList);
+                    }
                 } else {
                     System.out.println("Передан неверный номер Подзадачи");
                 }
@@ -128,7 +123,7 @@ public class TaskManager {
         }
     }
 
-    static void deleteAllElements(String mType) {
+    public static void deleteAllElements(String mType) {
 
         switch (mType) {
             case "EPIC":
@@ -144,7 +139,7 @@ public class TaskManager {
                 subTaskList.clear();  //Очищаем все сабтакси и обновляем статус у Эпика
                 for (Epic epic : epicList.values()) {
                     epic.subTaskElements.clear();
-                    epic.state = TaskState.NEW;
+                    epic.setState(TaskState.NEW);
                 }
                 break;
             default:
@@ -158,31 +153,31 @@ public class TaskManager {
     }
 
     //Обновление
-    public static void updateEpic(int epicID, Epic epic) {
+    public  void updateEpic(int epicID, Epic epic) {
 
         epicList.put(epicID, epic);
-        epic.recountEpicState(subTaskList);
     }
 
-    public static void updateTask(int taskID, Task task) {
+    public  void updateTask(int taskID, Task task) {
 
         taskList.put(taskID, task);
+        task.updateState();
     }
 
-    public static void updateSubTask(int subTaskID, SubTask subTask) {
+    public void updateSubTask(int mSubTaskID, SubTask mSubTask) {
 
-        subTaskList.put(subTaskID, subTask);
-        Epic epic = getEpicBySubtaskID(subTaskID);
-        subTask.updateState();
+        subTaskList.put(mSubTaskID, mSubTask);
+        Epic epic = getEpicBySubtaskID(mSubTaskID);
+        mSubTask.updateState();
         epic.recountEpicState(subTaskList);
     }
 
     public static void printAllElements(String mType) {
-
+        
         System.out.println("=====".repeat(5));
         switch (mType) {
             case "TASK":
-                for (Task task: taskList.values().toArray(new Task[0])){
+                for (Task task: taskList.values()){
                     System.out.println(task);
                 }
                 break;
