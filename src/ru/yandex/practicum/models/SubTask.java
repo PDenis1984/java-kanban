@@ -1,16 +1,25 @@
 package ru.yandex.practicum.models;
 
-public class SubTask extends  Task{
+public class SubTask extends Task {
     int epicID; // Эпик может измениться
 
-    public SubTask(int cID, String cName, String cDescription, int cEpicID){
-        super(cID, cName,cDescription);
+    public SubTask(int cID, String cName, String cDescription, int cEpicID) {
+        super(cID, cName, cDescription);
         this.epicID = cEpicID;
     }
 
     public int changeEpic(int mID) {
         this.epicID = mID;
-        return  this.epicID;
+        return this.epicID;
     }
 
+    @Override
+    public String toString() {
+
+        String result = "";
+        result = "Подзадача номер:" + this.ID + ",Наименование: '" + this.name
+                + "', Описание '" + this.description + "' находится в статусе: '" + this.state
+                + "' ;Подзадача относится к эпику: '" + this.epicID + "'";
+        return result;
+    }
 }

@@ -1,6 +1,7 @@
 package ru.yandex.practicum.models;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Epic extends Task {
     ArrayList<Integer> subTaskElements;
@@ -10,14 +11,12 @@ public class Epic extends Task {
         subTaskElements = new ArrayList<Integer>();
     }
 
-    public int addSubTask(SubTask mSubTask) {
 
-        this.subTaskElements.add(mSubTask.ID);
-        recountEpicState();
-        return mSubTask.ID;
+
+    public void updateState(HashMap<Integer, SubTask> subTaskHashMap) {
+        this.recountEpicState(subTaskHashMap);
     }
-
-    private void recountEpicState() {
+    protected void recountEpicState(HashMap<Integer, SubTask> subTaskHashMap) {
 
         TaskState taskState = this.state;
         int allState = subTaskElements.size();
@@ -26,9 +25,9 @@ public class Epic extends Task {
         int dState = 0;
 
         for (int subTask : subTaskElements) {
-            if (subTask.state == TaskState.NEW) {
+            if (subTaskHashMap.get(subTask).state == TaskState.NEW) {
                 nState++;
-            } else if (subTask.state == TaskState.IN_PROGRESS) {
+            } else if (subTaskHashMap.get(subTask).state == TaskState.IN_PROGRESS) {
                 inState++;
             } else {
                 dState++;
@@ -45,5 +44,14 @@ public class Epic extends Task {
 
     public void  removeSubtask(int mID) {
 
+    }
+
+    @Override
+    public String toString() {
+
+        String result = "Эпик номер: " + this.ID + ", Наименование: '" + this.name
+                + "', Описание " + this.description + " находится в статусе: '" + this.state
+                + "' ; Подзадачи в эпике: " + subTaskElements.toString();
+        return result;
     }
 }
