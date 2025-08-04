@@ -8,6 +8,7 @@ public class Task {
     protected TaskState state; // Статус должен изменяться
 
     public Task( String cName, String cDescription, TaskState cState) {
+
         this.name = cName;
         this.description = cDescription;
         this.state = cState;

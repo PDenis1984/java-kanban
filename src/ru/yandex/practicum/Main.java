@@ -15,30 +15,31 @@ public class Main {
 
     public static void fillTasks(TaskManager taskManager) {
 
-        //TТест номер 1, добавление
+        //Тест номер 1, добавление
         Epic epic1 = new Epic("Подготовка к зачету", "Выучить необходимые параграфы, решить задачи, написать шпаргалки");
         int epic1ID = taskManager.createEpic(epic1);
 
         SubTask subtask1 = new SubTask("Изучение параграфа 1", "Страницы с 5 по 12", epic1.getID(), TaskState.NEW);
 
         int subTask1ID = taskManager.createSubtask(epic1.getID(), subtask1);
-        SubTask subTask2 = new SubTask("Решить задачу", "Задачи, номер 2, 5", epic1.getID());
-        taskManager.createSubtask(epic1.getID(), subTask2);
-        Epic epic2 = new Epic(TaskManager.getElementID(), "Приготовить обед", "Комплексный обед");
-        taskManager.createEpic(epic2);
-        SubTask subTask21 = new SubTask(TaskManager.getElementID(), "Борщ", "Мясо,  свекла, овощи", epic2.getID());
+        SubTask subTask2 = new SubTask("Решить задачу", "Задачи, номер 2, 5", epic1ID, TaskState.IN_PROGRESS);
+        int subTask2ID = taskManager.createSubtask(epic1.getID(), subTask2);
 
-        taskManager.createSubtask(epic2.getID(), subTask21);
+        Epic epic2 = new Epic("Приготовить обед", "Комплексный обед");
+        int epic2ID = taskManager.createEpic(epic2);
+        SubTask subTask21 = new SubTask("Борщ", "Мясо,  свекла, овощи", epic2ID, TaskState.NEW);
 
-        Task task1 = new Task(TaskManager.getElementID(), "Сходить в магазин", "За хлебом");
-        taskManager.createTask(task1);
-        Task task2 = new Task(TaskManager.getElementID(), "Починить дверь", "Вставить глазок и замок");
-        taskManager.createTask(task2);
+        int subTask21ID = taskManager.createSubtask(epic2.getID(), subTask21);
+
+        Task task1 = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
+        int task1ID = taskManager.createTask(task1);
+        Task task2 = new Task("Починить дверь", "Вставить глазок и замок", TaskState.NEW);
+        int task2ID = taskManager.createTask(task2);
 
         System.out.println("Добавление всех типов задач: \r\n");
-        TaskManager.printAllElements("TASK");
-        TaskManager.printAllElements("EPIC");
-        TaskManager.printAllElements("SUB_TASK");
+        taskManager.printAllElements("TASK");
+        taskManager.printAllElements("EPIC");
+        taskManager.printAllElements("SUB_TASK");
 
 
         //Тест номер  2 - Изменение
@@ -53,45 +54,47 @@ public class Main {
         int taskID12 = 12;
 
         epic1.setDescription("Изучить необходимые параграфы");
-        taskManager.updateEpic(epicID1, epic1);
+        taskManager.updateEpic(epic1);
 
         epic2.setDescription("Бизнес-ланч");
-        taskManager.updateEpic(epicID4, epic2);
+        taskManager.updateEpic(epic2);
 
         subTask2.setDescription("Задача 10");
-        taskManager.updateSubTask(subTaskID3, subTask2);
+        taskManager.updateSubTask(subTask2);
 
         task2.setDescription(task2.getDescription() + " и ручку");
-        taskManager.updateTask(taskID7, task2);
+        taskManager.updateTask(task2);
 
 
         System.out.println("\r\nИзменение всех типов задач: \r\n");
-        TaskManager.printAllElements("TASK");
-        TaskManager.printAllElements("EPIC");
-        TaskManager.printAllElements("SUB_TASK");
+        taskManager.printAllElements("TASK");
+        taskManager.printAllElements("EPIC");
+        taskManager.printAllElements("SUB_TASK");
 
         // Тест номер 3, удаление. Удаление Эпика, удаление задачи, удаление подзадачи, попытка удаления с неверным номером
-        TaskManager.deleteElement(epicID1, "EPIC");
-        TaskManager.deleteElement(taskID6, "TASK");
-        TaskManager.deleteElement(subTaskID2, "SUB_TASK"); //Эпик уже удален, подзадача удаляется
-        TaskManager.deleteElement(taskID12, "TASK"); //передаем неверный номер подзадачи
+        taskManager.deleteElement(epicID1, "EPIC");
+        taskManager.deleteElement(taskID6, "TASK");
+        taskManager.deleteElement(subTaskID2, "SUB_TASK"); //Эпик уже удален, подзадача удаляется
+        taskManager.deleteElement(taskID12, "TASK"); //передаем неверный номер подзадачи
 
         System.out.println("\r\nУдаление выбранных типов задач:" + "\r\n".repeat(1));
-        TaskManager.printAllElements("TASK");
-        TaskManager.printAllElements("EPIC");
-        TaskManager.printAllElements("SUB_TASK");
+        taskManager.printAllElements("TASK");
+        taskManager.printAllElements("EPIC");
+        taskManager.printAllElements("SUB_TASK");
 
 
         //Удаление всех задач
-        TaskManager.deleteAllElements("TASK");
-        TaskManager.deleteAllElements("EPIC");
-        TaskManager.deleteAllElements("SUB_TASK");
+        taskManager.deleteAllElements("TASK");
+        taskManager.deleteAllElements("EPIC");
+        taskManager.deleteAllElements("SUB_TASK");
 
         System.out.println("Удаление всех задач");
-        TaskManager.printAllElements("TASK");
-        TaskManager.printAllElements("EPIC");
-        TaskManager.printAllElements("SUB_TASK");
+        taskManager.printAllElements("TASK");
+        taskManager.printAllElements("EPIC");
+        taskManager.printAllElements("SUB_TASK");
     }
+}
+
 
 
 

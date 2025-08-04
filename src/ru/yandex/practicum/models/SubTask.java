@@ -1,7 +1,7 @@
 package ru.yandex.practicum.models;
 
 public class SubTask extends Task {
-    final private int epicID; // Эпик может измениться
+    final private int epicID;
 
     public SubTask(String cName, String cDescription, int cEpicID, TaskState cState) {
         super(cName, cDescription, cState);
@@ -17,5 +17,9 @@ public class SubTask extends Task {
                 + "', Описание '" + this.description + "' находится в статусе: '" + this.getState()
                 + "'; Подзадача относится к эпику: [" + this.epicID + "]";
         return result;
+    }
+
+    public int getEpicID() {
+        return epicID;
     }
 }
