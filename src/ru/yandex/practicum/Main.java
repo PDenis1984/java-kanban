@@ -1,9 +1,7 @@
 package ru.yandex.practicum;
 
+
 import ru.yandex.practicum.models.*;
-
-import java.util.ArrayList;
-
 
 public class Main {
 
@@ -18,12 +16,13 @@ public class Main {
     public static void fillTasks(TaskManager taskManager) {
 
         //TТест номер 1, добавление
-        Epic epic1 = new Epic(TaskManager.getElementID(), "Подготовка к зачету", "Выучить необходимые параграфы, решить задачи, написать шпаргалки");
-        taskManager.createEpic(epic1);
+        Epic epic1 = new Epic("Подготовка к зачету", "Выучить необходимые параграфы, решить задачи, написать шпаргалки");
+        int epic1ID = taskManager.createEpic(epic1);
 
-        SubTask subtask1 = new SubTask(TaskManager.getElementID(), "Изучение параграфа 1", "Страницы с 5 по 12", epic1.getID());
-        taskManager.createSubtask(epic1.getID(), subtask1);
-        SubTask subTask2 = new SubTask(TaskManager.getElementID(), "Решить задачу", "Задачи, номер 2, 5", epic1.getID());
+        SubTask subtask1 = new SubTask("Изучение параграфа 1", "Страницы с 5 по 12", epic1.getID(), TaskState.NEW);
+
+        int subTask1ID = taskManager.createSubtask(epic1.getID(), subtask1);
+        SubTask subTask2 = new SubTask("Решить задачу", "Задачи, номер 2, 5", epic1.getID());
         taskManager.createSubtask(epic1.getID(), subTask2);
         Epic epic2 = new Epic(TaskManager.getElementID(), "Приготовить обед", "Комплексный обед");
         taskManager.createEpic(epic2);
@@ -95,5 +94,5 @@ public class Main {
     }
 
 
-}
+
 

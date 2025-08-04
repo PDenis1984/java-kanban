@@ -1,6 +1,5 @@
 package ru.yandex.practicum.models;
-
-enum TaskState {
+public enum TaskState {
     NEW,
     IN_PROGRESS,
     DONE

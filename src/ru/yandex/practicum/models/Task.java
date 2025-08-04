@@ -43,6 +43,19 @@ public class Task {
         return state;
     }
 
+    void setState(TaskState mState) {
+
+        this.state = mState;
+    }
+
+    public void updateState() {
+
+        if (this.getState() == TaskState.NEW) {
+            this.setState(TaskState.IN_PROGRESS);
+        } else if (this.getState() == TaskState.IN_PROGRESS) {
+            this.setState(TaskState.DONE);
+        }
+    }
 
     @Override
     public String toString() {
