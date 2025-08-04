@@ -1,9 +1,8 @@
 package ru.yandex.practicum.models;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
-public class Epic extends Task {
+public final class Epic extends Task {
     private ArrayList<Integer> subTaskElements;
 
     public Epic(String cName, String cDescription) {
@@ -13,7 +12,7 @@ public class Epic extends Task {
     }
 
 
-    protected void deleteSubTaskByID(int mID){
+    public void deleteSubTaskByID(int mID){
 
         if (subTaskElements.contains(Integer.valueOf(mID))){
             subTaskElements.remove(Integer.valueOf(mID));
@@ -22,18 +21,18 @@ public class Epic extends Task {
         }
     }
 
-    protected void deleteAllSubTask (){
+    public void deleteAllSubTask (){
 
         subTaskElements.clear();;
     }
 
-    protected void addSubTask(int mSubTaskID) {
+    public void addSubTask(int mSubTaskID) {
 
         subTaskElements.add(mSubTaskID);
     }
 
-    protected ArrayList<Integer> getAllSubTask() {
-        return  this.subTaskElements;
+    public ArrayList<Integer> getAllSubTask() {
+        return  new ArrayList<>(subTaskElements); //
     }
 
     @Override

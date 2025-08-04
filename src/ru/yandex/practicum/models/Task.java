@@ -39,23 +39,14 @@ public class Task {
     }
 
 
-    TaskState getState() {
+    public TaskState getState() {
 
         return state;
     }
 
-    void setState(TaskState mState) {
+    public void setState(TaskState mState) {
 
         this.state = mState;
-    }
-
-    public void updateState() {
-
-        if (this.getState() == TaskState.NEW) {
-            this.setState(TaskState.IN_PROGRESS);
-        } else if (this.getState() == TaskState.IN_PROGRESS) {
-            this.setState(TaskState.DONE);
-        }
     }
 
     @Override

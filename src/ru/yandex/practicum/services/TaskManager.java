@@ -1,12 +1,16 @@
-package ru.yandex.practicum.models;
+package ru.yandex.practicum.services;
 
-import java.util.AbstractSet;
+import ru.yandex.practicum.models.Epic;
+import ru.yandex.practicum.models.SubTask;
+import ru.yandex.practicum.models.Task;
+import ru.yandex.practicum.models.TaskState;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
 
-    private static int elementID; // Сквозная нумерация задач
+    private int elementID; // Сквозная нумерация задач
     private HashMap<Integer, Task> taskList;
     private HashMap<Integer, Epic> epicList;
     private HashMap<Integer, SubTask> subTaskList;
@@ -87,11 +91,15 @@ public class TaskManager {
 
         ArrayList<SubTask> subTaskArrayList = new ArrayList<SubTask>();
         Epic epic = epicList.get(Integer.valueOf(mEpicID));
-        ArrayList<Integer> subTaskNumbers = epic.getAllSubTask();
-        for (int number : subTaskNumbers) {
-            subTaskArrayList.add(subTaskList.get(Integer.valueOf(number)));
+        if (epic != null) {
+            ArrayList<Integer> subTaskNumbers = epic.getAllSubTask();
+            for (int number : subTaskNumbers) {
+                subTaskArrayList.add(subTaskList.get(Integer.valueOf(number)));
+            }
+            return subTaskArrayList;
+        } else {
+            return null;
         }
-        return subTaskArrayList;
     }
 
     //Создание задач всех типов
@@ -111,10 +119,10 @@ public class TaskManager {
         return taskID;
     }
 
-    public int createSubtask(int mEpicID, SubTask mSubTask) {
+    public int createSubtask(SubTask mSubTask) {
 
         int subTaskID = getElementID();
-        Epic epic = getEpicByID(mEpicID);
+        Epic epic = getEpicByID(mSubTask.getEpicID());
         if (epic != null) {
             mSubTask.setID(subTaskID);
             subTaskList.put(subTaskID, mSubTask);
@@ -136,9 +144,11 @@ public class TaskManager {
 
                 if (epicList.containsKey(mID)) {
                     Epic epic = epicList.get(mID);
-                    epic.deleteAllSubTask();
+                    ArrayList<Integer> subTaskNumbers = epic.getAllSubTask();
+                    for (Integer subTaskNumber : subTaskNumbers) {
+                        subTaskList.remove(subTaskNumber);
+                    }
                     epicList.remove(mID);
-                    recountEpicState(epic);
                 } else {
                     System.out.println("Передан неверный номер Эпика");
                 }
@@ -174,9 +184,7 @@ public class TaskManager {
         switch (mType) {
             case "EPIC":
 
-                for (Epic epic : epicList.values()) {
-                    epic.deleteAllSubTask();
-                }
+                subTaskList.clear(); // Все сабтаски принадлежат эпикам - потому удаляем их все
                 epicList.clear();
                 break;
             case "TASK":
@@ -192,6 +200,7 @@ public class TaskManager {
                 }
                 break;
             default:
+
                 System.out.println("Передан неверный тип задачи");
         }
     }
@@ -204,16 +213,31 @@ public class TaskManager {
     //Обновление
     public void updateEpic(Epic mEpic) {
 
+        Epic etalonEpic = epicList.get(mEpic.getID());
         if (epicList.containsKey(mEpic.getID())) {
-            epicList.put(mEpic.getID(), mEpic);
+            if ((etalonEpic.getState() == mEpic.getState()) && ((etalonEpic.getAllSubTask()).equals(mEpic.getAllSubTask()))) {
+                epicList.put(mEpic.getID(), mEpic);
+            } else {
+                System.out.println("Возможно обновление полей 'Name' и/или 'Description'");
+            }
+
         }
     }
 
     public void updateTask(Task mTask) {
 
+        Task etalonTask = taskList.get(mTask.getID());
         if (taskList.containsKey(mTask.getID())) {
-            taskList.put(mTask.getID(), mTask);
-            mTask.updateState();
+            if (etalonTask.getState() == mTask.getState()) {
+                if (mTask.getState() == TaskState.NEW) {
+                    mTask.setState(TaskState.IN_PROGRESS);
+                } else if (mTask.getState() == TaskState.IN_PROGRESS) {
+                    mTask.setState(TaskState.DONE);
+                }
+                taskList.put(mTask.getID(), mTask);
+            } else {
+                System.out.println("Запрещено обновлять поля, кроме 'Name' и/или 'Description'");
+            }
         }
     }
 
@@ -222,13 +246,17 @@ public class TaskManager {
 
         SubTask etalonSubTask = getSubTaskByID(mSubTask.getID());
         if (subTaskList.containsKey(mSubTask.getID())) {
-            if (mSubTask.getEpicID() == etalonSubTask.getEpicID()) {
+            if ((mSubTask.getEpicID() == etalonSubTask.getEpicID() && (etalonSubTask.getState() == mSubTask.getState()))) {
+                if (mSubTask.getState() == TaskState.NEW) {
+                    mSubTask.setState(TaskState.IN_PROGRESS);
+                } else if (mSubTask.getState() == TaskState.IN_PROGRESS) {
+                    mSubTask.setState(TaskState.DONE);
+                }
                 subTaskList.put(mSubTask.getID(), mSubTask);
-                Epic epic = getEpicBySubTaskID(mSubTask.getID());
-                mSubTask.updateState();
+                Epic epic = epicList.get(mSubTask.getEpicID());
                 recountEpicState(epic);
             } else {
-                System.out.println("Эпик подзадачи не может быть изменен");
+                System.out.println("Запрещено обновлять поля, кроме 'Name' и/или 'Description'");
             }
         }
     }
@@ -257,11 +285,12 @@ public class TaskManager {
 
     protected void recountEpicState(Epic mEpic) {
 
-        int allState = subTaskList.size();
+        int allState;
         int nState = 0;
         int inState = 0;
         int dState = 0;
         ArrayList<Integer> subTaskElements = mEpic.getAllSubTask();
+        allState = subTaskElements.size();
         for (int subTask : subTaskElements) {
             if (subTaskList.get(subTask).getState() == TaskState.NEW) {
                 nState++;
@@ -272,12 +301,11 @@ public class TaskManager {
             }
         }
         if (nState == allState) {
-            mEpic.state = TaskState.NEW;
-            ;
+            mEpic.setState(TaskState.NEW);
         } else if (dState == allState) {
-            mEpic.state = TaskState.DONE;
+            mEpic.setState(TaskState.DONE);
         } else {
-            mEpic.state = TaskState.IN_PROGRESS;
+            mEpic.setState(TaskState.IN_PROGRESS);
         }
     }
 }

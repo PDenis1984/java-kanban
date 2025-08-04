@@ -2,6 +2,7 @@ package ru.yandex.practicum;
 
 
 import ru.yandex.practicum.models.*;
+import ru.yandex.practicum.services.TaskManager;
 
 public class Main {
 
@@ -21,15 +22,15 @@ public class Main {
 
         SubTask subtask1 = new SubTask("Изучение параграфа 1", "Страницы с 5 по 12", epic1.getID(), TaskState.NEW);
 
-        int subTask1ID = taskManager.createSubtask(epic1.getID(), subtask1);
+        int subTask1ID = taskManager.createSubtask(subtask1);
         SubTask subTask2 = new SubTask("Решить задачу", "Задачи, номер 2, 5", epic1ID, TaskState.IN_PROGRESS);
-        int subTask2ID = taskManager.createSubtask(epic1.getID(), subTask2);
+        int subTask2ID = taskManager.createSubtask(subTask2);
 
         Epic epic2 = new Epic("Приготовить обед", "Комплексный обед");
         int epic2ID = taskManager.createEpic(epic2);
         SubTask subTask21 = new SubTask("Борщ", "Мясо,  свекла, овощи", epic2ID, TaskState.NEW);
 
-        int subTask21ID = taskManager.createSubtask(epic2.getID(), subTask21);
+        int subTask21ID = taskManager.createSubtask(subTask21);
 
         Task task1 = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
         int task1ID = taskManager.createTask(task1);
