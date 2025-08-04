@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Epic extends Task {
-    ArrayList<Integer> subTaskElements;
+    private ArrayList<Integer> subTaskElements;
 
-    public Epic(int cID, String cName, String cDescription) {
-        super(cID, cName, cDescription);
+    public Epic(String cName, String cDescription) {
+        super(cName, cDescription,TaskState.NEW);
         subTaskElements = new ArrayList<Integer>();
+
     }
 
 
@@ -38,11 +39,12 @@ public class Epic extends Task {
         }
     }
 
+
     @Override
     public String toString() {
 
         String result = "Эпик номер: [" + this.getID() + "], Наименование: '" + this.getName()
-                + "', Описание: '" + this.description + "' находится в статусе: '" + this.getState()
+                + "', Описание: '" + this. + "' находится в статусе: '" + this.getState()
                 + "'; Подзадачи в эпике: " + subTaskElements;
         return result;
     }

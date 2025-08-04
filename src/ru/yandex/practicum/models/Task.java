@@ -2,46 +2,59 @@ package ru.yandex.practicum.models;
 
 
 public class Task {
-    private final int ID;
-    private final String name;
-    String description; // писание может изменяться
-    private TaskState state; // Статус должен изменяться
+    protected  int ID;
+    protected String name;
+    protected String description; // Описание может изменяться
+    protected TaskState state; // Статус должен изменяться
 
-    public Task(int cID, String cName, String cDescription) {
-        this.ID = cID;
+    public Task( String cName, String cDescription, TaskState cState) {
         this.name = cName;
         this.description = cDescription;
-        this.state = TaskState.NEW; // Все задачи создаются в качестве "новых"
+        this.state = cState;
+        }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
 
     TaskState getState() {
 
-        return this.state;
+        return state;
     }
 
-    void updateState() {
-
-        if (this.state == TaskState.NEW) {
-            this.state = TaskState.IN_PROGRESS;
-        } else if(this.state == TaskState.IN_PROGRESS) {
-            this.state = TaskState.DONE;
-        }
-    }
-    public int getID(){
-        return this.ID;
-    }
 
     @Override
     public String toString() {
 
         String result = "";
-        result = "Задача номер: [" + this.getID() + "], Наименование: '" + this.name
-                + "', Описание: '" + this.description + "' находится в статусе: '" + this.state + "'";
+        result = "Задача номер: [" + this.getID() + "], Наименование: '" + this.getName()
+                + "', Описание: '" + this.getDescription() + "' находится в статусе: '" + this.getState() + "'";
         return result;
     }
 
-    @Override
+
+@Override
     public int hashCode() {
         int hash = 17;
         hash = hash + ((Integer)ID).hashCode();
@@ -54,19 +67,4 @@ public class Task {
         return  this.ID == ((Task)obj).ID;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setState(TaskState state) {
-        this.state = state;
-    }
 }

@@ -1,17 +1,13 @@
 package ru.yandex.practicum.models;
 
 public class SubTask extends Task {
-    int epicID; // Эпик может измениться
+    final private int epicID; // Эпик может измениться
 
-    public SubTask(int cID, String cName, String cDescription, int cEpicID) {
-        super(cID, cName, cDescription);
+    public SubTask(String cName, String cDescription, int cEpicID, TaskState cState) {
+        super(cName, cDescription, cState);
         this.epicID = cEpicID;
     }
 
-    public int changeEpic(int mID) {
-        this.epicID = mID;
-        return this.epicID;
-    }
 
     @Override
     public String toString() {

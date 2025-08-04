@@ -1,13 +1,15 @@
 package ru.yandex.practicum.models;
 
+import java.util.AbstractSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class TaskManager {
 
-    static int elementID; // Сквозная нумерация задач
-    private static HashMap<Integer, Task> taskList;
-    private static HashMap<Integer, Epic> epicList;
-    private static HashMap<Integer, SubTask> subTaskList;
+    private  static int elementID; // Сквозная нумерация задач
+    private  HashMap<Integer, Task> taskList;
+    private  HashMap<Integer, Epic> epicList;
+    private  HashMap<Integer, SubTask> subTaskList;
 
     public TaskManager() {
         taskList = new HashMap<Integer, Task>();
@@ -18,7 +20,7 @@ public class TaskManager {
     }
 
     // Набор для получения задач
-    static Task getTaskByID(int mID) {
+     Task getTaskByID(int mID) {
 
         if (!taskList.isEmpty()) {
             return taskList.get(mID);
@@ -26,7 +28,7 @@ public class TaskManager {
         return null;
     }
 
-    static Epic getEpicByID(int mID) {
+     Epic getEpicByID(int mID) {
 
         if (!epicList.isEmpty()) {
             return epicList.get(mID);
@@ -35,7 +37,7 @@ public class TaskManager {
     }
 
 
-    static Epic getEpicBySubtaskID(int mSubtaskID) {
+     Epic getEpicBySubtaskID(int mSubtaskID) {
 
         for (Epic epic : epicList.values()) {
             if (epic.subTaskElements.contains(mSubtaskID)) {
@@ -45,19 +47,31 @@ public class TaskManager {
         return null;
     }
 
-    static HashMap<Integer, Epic> getAllEpic() {
+     ArrayList<Epic> getAllEpic() {
 
-        return epicList;
+         ArrayList<Epic> epicArrayList = new ArrayList<Epic>();
+         for (Epic epic: epicList.values()) {
+             epicArrayList.add(epic);
+         }
+        return epicArrayList;
     }
 
-    static HashMap<Integer, Task> getAllTasks(){
+     ArrayList<Task> getAllTasks(){
 
-        return taskList;
+        ArrayList<Task> taskArrayList = new ArrayList<Task>();
+        for (Task task: taskList.values()){
+            taskArrayList.add(task);
+        }
+        return taskArrayList;
     }
 
-    static HashMap<Integer, SubTask> getAllSubTasks() {
+     ArrayList<SubTask> getAllSubTasks() {
 
-        return subTaskList;
+        ArrayList<SubTask> subTaskArrayList = new ArrayList<SubTask>();
+         for (SubTask subTask: subTaskList.values()){
+             subTaskArrayList.add(subTask);
+         }
+         return subTaskArrayList;
     }
 
     //Создание задач всех типов
@@ -86,7 +100,7 @@ public class TaskManager {
 
 
     // Удаление
-    public static void deleteElement(int mID, String mType) {
+    public  void deleteElement(int mID, String mType) {
 
         switch (mType) {
             case "EPIC":
@@ -123,7 +137,7 @@ public class TaskManager {
         }
     }
 
-    public static void deleteAllElements(String mType) {
+    public  void deleteAllElements(String mType) {
 
         switch (mType) {
             case "EPIC":
@@ -147,7 +161,7 @@ public class TaskManager {
         }
     }
 
-    public static int getElementID() {
+    public  int getElementID() {
         elementID++;
         return elementID;
     }
@@ -172,7 +186,7 @@ public class TaskManager {
         epic.recountEpicState(subTaskList);
     }
 
-    public static void printAllElements(String mType) {
+    public  void printAllElements(String mType) {
         
         System.out.println("=====".repeat(5));
         switch (mType) {
