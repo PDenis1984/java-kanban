@@ -1,5 +1,6 @@
 package ru.yandex.practicum.services;
 
+import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.Epic;
 import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
@@ -8,7 +9,7 @@ import ru.yandex.practicum.models.TaskState;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class TaskManager {
+public class TaskManager implements TaskManagerIntf {
 
     private int elementID; // Сквозная нумерация задач
     private HashMap<Integer, Task> taskList;
@@ -24,6 +25,7 @@ public class TaskManager {
     }
 
     // Набор для получения задач
+    @Override
     public Task getTaskByID(int mID) {
 
         if (!taskList.isEmpty()) {
@@ -32,6 +34,7 @@ public class TaskManager {
         return null;
     }
 
+    @Override
     public Epic getEpicByID(int mID) {
 
         if (!epicList.isEmpty()) {
@@ -41,6 +44,7 @@ public class TaskManager {
     }
 
 
+    @Override
     public Epic getEpicBySubTaskID(int mSubtaskID) {
 
         for (Epic epic : epicList.values()) {
@@ -51,6 +55,7 @@ public class TaskManager {
         return null;
     }
 
+    @Override
     public SubTask getSubTaskByID(int mSubTaskID) {
 
         if (subTaskList.containsKey(mSubTaskID)) {
@@ -60,6 +65,7 @@ public class TaskManager {
     }
 
 
+    @Override
     public ArrayList<Epic> getAllEpic() {
 
         ArrayList<Epic> epicArrayList = new ArrayList<Epic>();
@@ -69,6 +75,7 @@ public class TaskManager {
         return epicArrayList;
     }
 
+    @Override
     public ArrayList<Task> getAllTasks() {
 
         ArrayList<Task> taskArrayList = new ArrayList<Task>();
@@ -78,6 +85,7 @@ public class TaskManager {
         return taskArrayList;
     }
 
+    @Override
     public ArrayList<SubTask> getAllSubTasks() {
 
         ArrayList<SubTask> subTaskArrayList = new ArrayList<SubTask>();
@@ -87,6 +95,7 @@ public class TaskManager {
         return subTaskArrayList;
     }
 
+    @Override
     public ArrayList<SubTask> getAllSubTaskByEpicID(int mEpicID) {
 
         ArrayList<SubTask> subTaskArrayList = new ArrayList<SubTask>();
@@ -103,6 +112,7 @@ public class TaskManager {
     }
 
     //Создание задач всех типов
+    @Override
     public int createEpic(Epic mEpic) {
 
         int epicID = getElementID();
@@ -111,6 +121,7 @@ public class TaskManager {
         return epicID;
     }
 
+    @Override
     public int createTask(Task mTask) {
 
         int taskID = getElementID();
@@ -119,6 +130,7 @@ public class TaskManager {
         return taskID;
     }
 
+    @Override
     public int createSubtask(SubTask mSubTask) {
 
         int subTaskID = getElementID();
@@ -137,6 +149,7 @@ public class TaskManager {
 
 
     // Удаление
+    @Override
     public void deleteElement(int mID, String mType) {
 
         switch (mType) {
@@ -179,6 +192,7 @@ public class TaskManager {
         }
     }
 
+    @Override
     public void deleteAllElements(String mType) {
 
         switch (mType) {
@@ -211,6 +225,7 @@ public class TaskManager {
     }
 
     //Обновление
+    @Override
     public void updateEpic(Epic mEpic) {
 
         Epic etalonEpic = epicList.get(mEpic.getID());
@@ -224,6 +239,7 @@ public class TaskManager {
         }
     }
 
+    @Override
     public void updateTask(Task mTask) {
 
         if (taskList.containsKey(mTask.getID())) {
@@ -233,6 +249,7 @@ public class TaskManager {
         }
     }
 
+    @Override
     public void updateSubTask(SubTask mSubTask) {
 
         SubTask etalonSubTask = getSubTaskByID(mSubTask.getID());
