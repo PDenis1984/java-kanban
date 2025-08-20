@@ -2,7 +2,11 @@ package ru.yandex.practicum.intf;
 
 import ru.yandex.practicum.models.Task;
 
+import java.util.List;
+
 public interface HistoryManagerIntf {
 
-    public <T extends Task> T getHistory();
+    public List<Task> getHistory();
+
+    public void add(Task task);
 }

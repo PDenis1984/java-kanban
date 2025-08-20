@@ -2,19 +2,19 @@ package ru.yandex.practicum;
 
 
 import ru.yandex.practicum.models.*;
-import ru.yandex.practicum.services.TaskManager;
+import ru.yandex.practicum.services.InMemoryTaskManager;
 
 public class Main {
 
     public static void main(String[] args) {
 
         System.out.println("Поехали!");
-        TaskManager taskManager = new TaskManager();
+        InMemoryTaskManager taskManager = new InMemoryTaskManager();
         int newValue = 1;
         fillTasks(taskManager);
     }
 
-    public static void fillTasks(TaskManager taskManager) {
+    public static void fillTasks(InMemoryTaskManager taskManager) {
 
         //Тест номер 1, добавление
         Epic epic1 = new Epic("Подготовка к зачету", "Выучить необходимые параграфы, решить задачи, написать шпаргалки");

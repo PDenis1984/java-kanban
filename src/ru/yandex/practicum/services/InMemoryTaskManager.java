@@ -6,30 +6,33 @@ import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.models.TaskState;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
-public class TaskManager implements TaskManagerIntf {
+public class InMemoryTaskManager<T> implements TaskManagerIntf {
 
     private int elementID; // Сквозная нумерация задач
     private HashMap<Integer, Task> taskList;
     private HashMap<Integer, Epic> epicList;
     private HashMap<Integer, SubTask> subTaskList;
+    private final int historyCount = 10;
+    private InMemoryHistoryManager inMemoryHistoryManager;
 
-    public TaskManager() {
+    public InMemoryTaskManager() {
         taskList = new HashMap<Integer, Task>();
         epicList = new HashMap<Integer, Epic>();
         subTaskList = new HashMap<Integer, SubTask>();
         elementID = 0;
-
+        this.inMemoryHistoryManager = new InMemoryHistoryManager();
     }
 
     // Набор для получения задач
     @Override
     public Task getTaskByID(int mID) {
 
-        if (!taskList.isEmpty()) {
-            return taskList.get(mID);
+        if (taskList.containsKey(mID)) {
+            Task task = taskList.get(mID);
+            inMemoryHistoryManager.add(task);
+            return  task;
         }
         return null;
     }
@@ -38,7 +41,9 @@ public class TaskManager implements TaskManagerIntf {
     public Epic getEpicByID(int mID) {
 
         if (!epicList.isEmpty()) {
-            return epicList.get(mID);
+            Epic epic = epicList.get(mID);
+            inMemoryHistoryManager.add(epic);
+            return epic;
         }
         return null;
     }
@@ -59,7 +64,9 @@ public class TaskManager implements TaskManagerIntf {
     public SubTask getSubTaskByID(int mSubTaskID) {
 
         if (subTaskList.containsKey(mSubTaskID)) {
-            return subTaskList.get(mSubTaskID);
+            SubTask subTask = subTaskList.get(mSubTaskID);
+            inMemoryHistoryManager.add(subTask);
+            return subTask;
         }
         return null;
     }

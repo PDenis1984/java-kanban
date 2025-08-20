@@ -1,10 +1,10 @@
 package ru.yandex.practicum.models;
 
-import ru.yandex.practicum.services.TaskManager;
+import ru.yandex.practicum.services.InMemoryTaskManager;
 
 public class FillTaskTest {
 
-    public static void fillTasks(TaskManager taskManager) {
+    public static void fillTasks(InMemoryTaskManager taskManager) {
 
         //Тест номер 1, добавление
         Epic epic1 = new Epic("Подготовка к зачету", "Выучить необходимые параграфы, решить задачи, написать шпаргалки");

@@ -2,16 +2,16 @@ package ru.yandex.practicum.models;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.services.TaskManager;
+import ru.yandex.practicum.services.InMemoryTaskManager;
 
 class EpicTest {
 
-    static TaskManager taskManagerTest;
+    static InMemoryTaskManager taskManagerTest;
 
     @BeforeAll
     static void beforeAll() {
 
-        taskManagerTest = new TaskManager();
+        taskManagerTest = new InMemoryTaskManager();
         FillTaskTest.fillTasks(taskManagerTest);
     }
     @Test
