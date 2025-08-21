@@ -6,33 +6,36 @@ public final class Epic extends Task {
     private ArrayList<Integer> subTaskElements;
 
     public Epic(String cName, String cDescription) {
-        super(cName, cDescription,TaskState.NEW);
+        super(cName, cDescription, TaskState.NEW);
         subTaskElements = new ArrayList<Integer>();
 
     }
 
 
-    public void deleteSubTaskByID(int mID){
+    public void deleteSubTaskByID(int mID) {
 
-        if (subTaskElements.contains(Integer.valueOf(mID))){
+        if (subTaskElements.contains(Integer.valueOf(mID))) {
             subTaskElements.remove(Integer.valueOf(mID));
         } else {
             System.out.println("В этом эпике нет такой подзадачи");
         }
     }
 
-    public void deleteAllSubTask (){
+    public void deleteAllSubTask() {
 
-        subTaskElements.clear();;
+        subTaskElements.clear();
+        ;
     }
 
     public void addSubTask(int mSubTaskID) {
 
-        subTaskElements.add(mSubTaskID);
+        if (!(this.getID() == mSubTaskID)) {
+            subTaskElements.add(mSubTaskID);
+        }
     }
 
     public ArrayList<Integer> getAllSubTask() {
-        return  new ArrayList<>(subTaskElements); //
+        return new ArrayList<>(subTaskElements); //
     }
 
     @Override

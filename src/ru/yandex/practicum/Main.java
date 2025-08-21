@@ -1,16 +1,15 @@
 package ru.yandex.practicum;
 
-
 import ru.yandex.practicum.models.*;
 import ru.yandex.practicum.services.InMemoryTaskManager;
+import ru.yandex.practicum.services.Managers;
 
 public class Main {
 
     public static void main(String[] args) {
 
         System.out.println("Поехали!");
-        InMemoryTaskManager taskManager = new InMemoryTaskManager();
-        int newValue = 1;
+        InMemoryTaskManager taskManager = Managers.getManager();
         fillTasks(taskManager);
     }
 
@@ -72,6 +71,18 @@ public class Main {
         taskManager.printAllElements("EPIC");
         taskManager.printAllElements("SUB_TASK");
 
+
+        //Test 3 Просмотр задач, эпиков подзадач, с достижением 11 просмотров
+        System.out.println("Задача      6: " + taskManager.getTaskByID(6));
+        System.out.println("Эпик        1: " + taskManager.getEpicByID(1));
+        System.out.println("Подзадача   3: " + taskManager.getSubTaskByID(3));
+        System.out.println(taskManager.getHistory());
+        System.out.println("Запрашиваем 10 раз одну  задачу");
+        for (int i = 0; i < 10; i++) {
+            taskManager.getTaskByID(7);
+        }
+        System.out.println(taskManager.getHistory());
+
         // Тест номер 3, удаление. Удаление Эпика, удаление задачи, удаление подзадачи, попытка удаления с неверным номером
         taskManager.deleteElement(epicID1, "EPIC");
         taskManager.deleteElement(taskID6, "TASK");
@@ -82,6 +93,8 @@ public class Main {
         taskManager.printAllElements("TASK");
         taskManager.printAllElements("EPIC");
         taskManager.printAllElements("SUB_TASK");
+
+
 
 
         //Удаление всех задач

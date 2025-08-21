@@ -8,13 +8,12 @@ import ru.yandex.practicum.models.TaskState;
 
 import java.util.*;
 
-public class InMemoryTaskManager<T> implements TaskManagerIntf {
+public class InMemoryTaskManager implements TaskManagerIntf {
 
     private int elementID; // Сквозная нумерация задач
     private HashMap<Integer, Task> taskList;
     private HashMap<Integer, Epic> epicList;
     private HashMap<Integer, SubTask> subTaskList;
-    private final int historyCount = 10;
     private InMemoryHistoryManager inMemoryHistoryManager;
 
     public InMemoryTaskManager() {
@@ -317,5 +316,8 @@ public class InMemoryTaskManager<T> implements TaskManagerIntf {
         } else {
             mEpic.setState(TaskState.IN_PROGRESS);
         }
+    }
+    public List<Task> getHistory() {
+        return  inMemoryHistoryManager.getHistory();
     }
 }

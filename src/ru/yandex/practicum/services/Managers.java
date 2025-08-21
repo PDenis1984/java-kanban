@@ -1,8 +1,8 @@
 package ru.yandex.practicum.services;
 
-public class Managers<T> {
+public class Managers {
 
-    public InMemoryTaskManager getManager() {
+    public static InMemoryTaskManager getManager() {
 
         return new InMemoryTaskManager();
     }
