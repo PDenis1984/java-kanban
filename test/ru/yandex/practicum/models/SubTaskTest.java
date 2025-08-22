@@ -2,6 +2,7 @@ package ru.yandex.practicum.models;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.services.InMemoryTaskManager;
 import ru.yandex.practicum.services.Managers;
 
@@ -9,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SubTaskTest {
 
-    static InMemoryTaskManager taskManagerTest;
+    static TaskManagerIntf taskManagerTest;
 
     @BeforeAll
     static void beforeAll() {

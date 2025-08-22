@@ -1,5 +1,6 @@
 package ru.yandex.practicum.services;
 
+import ru.yandex.practicum.intf.HistoryManagerIntf;
 import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.Epic;
 import ru.yandex.practicum.models.SubTask;
@@ -11,17 +12,17 @@ import java.util.*;
 public class InMemoryTaskManager implements TaskManagerIntf {
 
     private int elementID; // Сквозная нумерация задач
-    private HashMap<Integer, Task> taskList;
-    private HashMap<Integer, Epic> epicList;
-    private HashMap<Integer, SubTask> subTaskList;
-    private InMemoryHistoryManager inMemoryHistoryManager;
+    private Map<Integer, Task> taskList;
+    private Map<Integer, Epic> epicList;
+    private Map<Integer, SubTask> subTaskList;
+    private HistoryManagerIntf inMemoryHistoryManager;
 
     public InMemoryTaskManager() {
         taskList = new HashMap<Integer, Task>();
         epicList = new HashMap<Integer, Epic>();
         subTaskList = new HashMap<Integer, SubTask>();
         elementID = 0;
-        this.inMemoryHistoryManager = new InMemoryHistoryManager();
+        this.inMemoryHistoryManager = Managers.getDefaultHistoryManager();
     }
 
     // Набор для получения задач
@@ -270,6 +271,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         }
     }
 
+    @Override
     public void printAllElements(String mType) {
 
         System.out.println("=====".repeat(5));
@@ -317,6 +319,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
             mEpic.setState(TaskState.IN_PROGRESS);
         }
     }
+    @Override
     public List<Task> getHistory() {
         return  inMemoryHistoryManager.getHistory();
     }

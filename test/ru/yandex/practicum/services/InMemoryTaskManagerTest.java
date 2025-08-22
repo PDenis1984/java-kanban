@@ -2,13 +2,14 @@ package ru.yandex.practicum.services;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class InMemoryTaskManagerTest {
 
-    static InMemoryTaskManager taskManagerTest;
+    static TaskManagerIntf taskManagerTest;
 
     @BeforeAll
     static void beforeAll() {
@@ -49,7 +50,7 @@ class InMemoryTaskManagerTest {
 
         Task task = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
         int taskID = taskManagerTest.createTask(task);
-        assertEquals(task, taskManagerTest.getSubTaskByID(taskID));
+        assertEquals(task, taskManagerTest.getTaskByID(taskID));
     }
 
     @Test

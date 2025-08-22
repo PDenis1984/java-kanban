@@ -19,7 +19,7 @@ class TaskTest {
     @Test
     void testEquals() {
         Task task1 = taskManagerTest.getTaskByID(6);
-        Task task2 = taskManagerTest.getSubTaskByID(6);
+        Task task2 = taskManagerTest.getTaskByID(6);
         assertEquals(task1, task2);
     }
 }

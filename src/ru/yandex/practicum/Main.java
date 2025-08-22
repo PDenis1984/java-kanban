@@ -1,5 +1,6 @@
 package ru.yandex.practicum;
 
+import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.*;
 import ru.yandex.practicum.services.InMemoryTaskManager;
 import ru.yandex.practicum.services.Managers;
@@ -9,11 +10,11 @@ public class Main {
     public static void main(String[] args) {
 
         System.out.println("Поехали!");
-        InMemoryTaskManager taskManager = Managers.getManager();
+        TaskManagerIntf taskManager = Managers.getManager();
         fillTasks(taskManager);
     }
 
-    public static void fillTasks(InMemoryTaskManager taskManager) {
+    public static void fillTasks(TaskManagerIntf taskManager) {
 
         //Тест номер 1, добавление
         Epic epic1 = new Epic("Подготовка к зачету", "Выучить необходимые параграфы, решить задачи, написать шпаргалки");

@@ -75,7 +75,7 @@ public class Task {
     @Override
     public boolean equals(Object obj) {
 
-        return this.ID == ((Task) obj).ID;
+        return this.getID() == ((Task) obj).ID;
     }
 
 }

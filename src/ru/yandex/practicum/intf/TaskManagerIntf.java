@@ -5,6 +5,7 @@ import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface TaskManagerIntf {
     // Набор для получения задач
@@ -16,13 +17,13 @@ public interface TaskManagerIntf {
 
     SubTask getSubTaskByID(int mSubTaskID);
 
-    ArrayList<Epic> getAllEpic();
+    List<Epic> getAllEpic();
 
-    ArrayList<Task> getAllTasks();
+    List<Task> getAllTasks();
 
-    ArrayList<SubTask> getAllSubTasks();
+    List<SubTask> getAllSubTasks();
 
-    ArrayList<SubTask> getAllSubTaskByEpicID(int mEpicID);
+    List<SubTask> getAllSubTaskByEpicID(int mEpicID);
 
     //Создание задач всех типов
     int createEpic(Epic mEpic);
@@ -42,4 +43,8 @@ public interface TaskManagerIntf {
     void updateTask(Task mTask);
 
     void updateSubTask(SubTask mSubTask);
+
+    List<Task> getHistory();
+
+    void printAllElements(String taskType);
 }

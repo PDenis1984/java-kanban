@@ -8,7 +8,7 @@ import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManagerIntf {
 
-    private List<Task> historyList;
+    private final List<Task> historyList;
     private final static int MAX_HISTORY = 10;
 
     public InMemoryHistoryManager() {
@@ -22,10 +22,17 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
         }
         historyList.addLast(task);
     }
-
+    @Override
     public List<Task> getHistory(){
 
         return  new ArrayList<>(this.historyList);
+    }
+
+    @Override
+    public void clearHistory(){
+
+        historyList.clear();
+
     }
 }
 
