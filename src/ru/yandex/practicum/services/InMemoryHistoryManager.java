@@ -4,23 +4,26 @@ import ru.yandex.practicum.intf.HistoryManagerIntf;
 import ru.yandex.practicum.models.Task;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManagerIntf {
 
-    private final List<Task> historyList;
-    private final static int MAX_HISTORY = 10;
+    // В мапе слева - ID задачи, справа Индекс в истории просмотров
+    private final HashMap<Integer, Integer> historyMap;
 
     public InMemoryHistoryManager() {
-        this.historyList = new ArrayList<>();
+
+        this.historyMap = new HashMap<>();
     }
     @Override
     public void add(Task task) {
 
-        if (historyList.size() == MAX_HISTORY) {
-            historyList.removeFirst();
-        }
-        historyList.addLast(task);
+        //Вычисляем, есть ли задача, если нет - добавляем в конец, обновляем historyMap <IDзадачи, size -1>?
+        // если есть, то historyMap<ID задачи, >
+        historyMap.removeFirst();
+        historyMap.addLast(task);
     }
     @Override
     public List<Task> getHistory(){
@@ -33,6 +36,19 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
 
         historyList.clear();
 
+    }
+
+    @Override
+    public void remove(int mId) {
+
+
+    }
+    static class IndexHashMap<K,V> extends LinkedHashMap<K,V> {
+        @Override
+        public V put(K key, V value) {
+            System.out.println("Сохранение значения " + value + " в ключе " + key);
+            return super.put(key, value);
+        }
     }
 }
 

@@ -32,7 +32,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         if (taskList.containsKey(mID)) {
             Task task = taskList.get(mID);
             inMemoryHistoryManager.add(task);
-            return  task;
+            return task;
         }
         return null;
     }
@@ -54,6 +54,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
 
         for (Epic epic : epicList.values()) {
             if (epic.getAllSubTask().contains(mSubtaskID)) {
+                inMemoryHistoryManager.add(epic);
                 return epic;
             }
         }
@@ -319,8 +320,10 @@ public class InMemoryTaskManager implements TaskManagerIntf {
             mEpic.setState(TaskState.IN_PROGRESS);
         }
     }
+
     @Override
     public List<Task> getHistory() {
-        return  inMemoryHistoryManager.getHistory();
+
+        return inMemoryHistoryManager.getHistory();
     }
 }

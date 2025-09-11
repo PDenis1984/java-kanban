@@ -11,4 +11,6 @@ public interface HistoryManagerIntf {
     void add(Task task);
 
     void clearHistory();
+
+    void remove(int mId);
 }
