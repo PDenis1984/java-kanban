@@ -48,6 +48,15 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         return null;
     }
 
+    private Epic getEpicByIDForSubTask(int mID) {
+
+        if (!epicList.isEmpty()) {
+            Epic epic = epicList.get(mID);
+            return epic;
+        }
+        return null;
+    }
+
 
     @Override
     public Epic getEpicBySubTaskID(int mSubtaskID) {
@@ -142,7 +151,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
     public int createSubtask(SubTask mSubTask) {
 
         int subTaskID = getElementID();
-        Epic epic = getEpicByID(mSubTask.getEpicID());
+        Epic epic = getEpicByIDForSubTask(mSubTask.getEpicID());
         if (epic != null) {
             mSubTask.setID(subTaskID);
             subTaskList.put(subTaskID, mSubTask);
@@ -168,8 +177,10 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                     ArrayList<Integer> subTaskNumbers = epic.getAllSubTask();
                     for (Integer subTaskNumber : subTaskNumbers) {
                         subTaskList.remove(subTaskNumber);
+                        inMemoryHistoryManager.remove(subTaskNumber);
                     }
                     epicList.remove(mID);
+                    inMemoryHistoryManager.remove(mID);
                 } else {
                     System.out.println("Передан неверный номер Эпика");
                 }
@@ -178,6 +189,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
 
                 if (taskList.containsKey(mID)) {
                     taskList.remove(mID);
+                    inMemoryHistoryManager.remove(mID);
                 } else {
                     System.out.println("Передан неверный номер Задачи: " + mID);
                 }
@@ -191,6 +203,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                         epic.deleteSubTaskByID(mID);
                         recountEpicState(epic);
                     }
+                    inMemoryHistoryManager.remove(mID);
                 } else {
                     System.out.println("Передан неверный номер Подзадачи");
                 }

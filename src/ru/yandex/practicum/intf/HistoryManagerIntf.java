@@ -13,4 +13,5 @@ public interface HistoryManagerIntf {
     void clearHistory();
 
     void remove(int mId);
+
 }
