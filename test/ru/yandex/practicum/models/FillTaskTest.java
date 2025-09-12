@@ -6,7 +6,7 @@ public class FillTaskTest {
 
     public static void fillTasks(TaskManagerIntf taskManager) {
 
-        // Дополнгительное задание, добавляем по шаблону:
+        // Дополнительное задание, добавляем по шаблону:
         // Сперва две задачи
         // Эпик и три подзадачи
         // Эпик без подзадач
