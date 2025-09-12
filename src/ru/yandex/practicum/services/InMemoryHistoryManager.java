@@ -37,8 +37,8 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
                 size++;
             }
         }
-        public void linkLast(int index, K task) {
 
+        public void linkLast(int index, K task) {
 
             if (internalMap.containsKey(index)) {
                 this.remove(index);
@@ -46,7 +46,7 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
             Node<K> oldHead = head;
             Node<K> oldTail = tail;
 
-            if (oldHead != null){
+            if (oldHead != null) {
                 Node<K> newNode = new Node<>(oldTail, task, null);
                 this.tail = newNode;
                 oldTail.next = newNode;
@@ -81,10 +81,10 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
                 if (oldPrev != null && oldNext != null) { // Если в центре списка
                     oldPrev.next = oldNext;
                     oldNext.prev = oldPrev;
-                } else if (oldPrev == null && oldNext != null){ // если начало списка, а не одна запись
+                } else if (oldPrev == null && oldNext != null) { // если начало списка, а не одна запись
                     head = nodeToDelete.next;
                     head.prev = null;
-                }else if (oldPrev != null) { // если конец списка
+                } else if (oldPrev != null) { // если конец списка
                     oldPrev.next = null;
                     tail = oldPrev;
                 } else { // Это единственная запись в истории
@@ -139,7 +139,7 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
         historyMap.remove(mId);
     }
 
-    public void removeNode (int index) {
+    public void removeNode(int index) {
         historyMap.remove(index);
     }
 
