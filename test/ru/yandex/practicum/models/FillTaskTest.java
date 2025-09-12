@@ -1,9 +1,6 @@
 package ru.yandex.practicum.models;
 
 import ru.yandex.practicum.intf.TaskManagerIntf;
-import ru.yandex.practicum.services.InMemoryTaskManager;
-
-import java.util.List;
 
 public class FillTaskTest {
 

@@ -14,6 +14,7 @@ class InMemoryHistoryManagerTest {
 
     static TaskManagerIntf taskManagerTest;
     static HistoryManagerIntf inHM;
+
     @BeforeAll
     static void beforeAll() {
 
@@ -23,7 +24,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void getHistoryTest (){
+    void getHistoryTest() {
 
         HistoryManagerIntf historyManager = new InMemoryHistoryManager();
         historyManager.clearHistory();
@@ -44,11 +45,11 @@ class InMemoryHistoryManagerTest {
         assertNotNull(taskList, "Список пуст и не проинициализирован!");
         assertFalse(taskList.isEmpty(), "Список пуст!");
         taskManagerTest.getTaskByID(task1ID);
-        assertEquals(1, taskManagerTest.getHistory().size(),"Задача перезаписана");
+        assertEquals(1, taskManagerTest.getHistory().size(), "Задача перезаписана");
     }
 
     @Test
-    void notRepeatedTaskAndEpicsAndSubTask (){
+    void notRepeatedTaskAndEpicsAndSubTask() {
 
         Task task1 = new Task("Абсолютно новый таск", "новый таск", TaskState.IN_PROGRESS);
         inHM.add(task1);
@@ -74,7 +75,7 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    void deleteEpicWithHisHistory(){
+    void deleteEpicWithHisHistory() {
 
 
         Epic epic1 = new Epic("Абсолютно новый эпик", "новый эпик");
@@ -84,8 +85,9 @@ class InMemoryHistoryManagerTest {
         inHM.remove(epic1.getID());
         assertFalse(inHM.getHistory().contains(epic1), "Эпик не удалился из списка");
     }
+
     @Test
-    void deleteEpicWithSubtasks(){
+    void deleteEpicWithSubtasks() {
 
         Epic epic1 = new Epic("Подготовка к зачету", "Выучить необходимые параграфы, решить задачи, написать шпаргалки");
         int epic1ID = taskManagerTest.createEpic(epic1);

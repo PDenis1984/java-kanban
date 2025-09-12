@@ -3,10 +3,10 @@ package ru.yandex.practicum.models;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.intf.TaskManagerIntf;
-import ru.yandex.practicum.services.InMemoryTaskManager;
 import ru.yandex.practicum.services.Managers;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 class EpicTest {
 
@@ -18,6 +18,7 @@ class EpicTest {
         taskManagerTest = Managers.getManager();
         FillTaskTest.fillTasks(taskManagerTest);
     }
+
     @Test
     void testEquals() {
 
