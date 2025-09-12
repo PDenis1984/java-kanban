@@ -1,7 +1,7 @@
 package ru.yandex.practicum.models;
 
 public class SubTask extends Task {
-    final private int epicID;
+    private final int epicID;
 
     public SubTask(String cName, String cDescription, int cEpicID, TaskState cState) {
         super(cName, cDescription, cState);
