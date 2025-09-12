@@ -2,7 +2,7 @@ package ru.yandex.practicum.models;
 
 
 public class Task {
-    protected int ID;
+    protected int iD;
     protected String name;
     protected String description; // Описание может изменяться
     protected TaskState state; // Статус должен изменяться
@@ -16,12 +16,12 @@ public class Task {
 
     public int getID() {
 
-        return this.ID;
+        return this.iD;
     }
 
-    public void setID(int ID) {
+    public void setID(int iD) {
 
-        this.ID = ID;
+        this.iD = iD;
     }
 
     public String getName() {
@@ -68,14 +68,14 @@ public class Task {
     @Override
     public int hashCode() {
         int hash = 17;
-        hash = hash + ((Integer) ID).hashCode();
+        hash = hash + ((Integer) iD).hashCode();
         return hash; // возвращаем итоговый хеш
     }
 
     @Override
     public boolean equals(Object obj) {
 
-        return this.getID() == ((Task) obj).ID;
+        return this.getID() == ((Task) obj).iD;
     }
 
 }
