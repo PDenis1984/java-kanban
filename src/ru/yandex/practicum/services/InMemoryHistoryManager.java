@@ -27,18 +27,7 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
 
         public void add(int index, K body) {
 
-            final Node<K> oldHead = head;
-            Node<K> newNode;
 
-            if (oldHead == null) { // Первый элемент
-                newNode = new Node<>(null, body, null);
-                this.tail = newNode;
-                this.head = newNode;
-                newNode.prev = null;
-                newNode.next = null;
-                internalMap.put(index, newNode);
-                size++;
-            }
         }
 
         public void linkLast(int index, K task) {
@@ -46,19 +35,24 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
             if (internalMap.containsKey(index)) {
                 this.remove(index);
             }
-            Node<K> oldHead = head;
             Node<K> oldTail = tail;
 
-            if (oldHead != null) {
+            if (head != null) {
+
                 Node<K> newNode = new Node<>(oldTail, task, null);
                 this.tail = newNode;
                 oldTail.next = newNode;
                 newNode.prev = oldTail;
-                newNode.next = null;
                 internalMap.put(index, newNode);
                 size++;
-            } else {
-                this.add(index, task);
+            } else {                 // Первый элемент
+
+                Node<K> newNode;
+                newNode = new Node<>(null, task, null);
+                this.tail = newNode;
+                this.head = newNode;
+                internalMap.put(index, newNode);
+                size++;
             }
         }
 
@@ -78,30 +72,41 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
             if (!internalMap.containsKey(index)) {
                 System.out.println("Задачи с индексом " + index + " нет в истории");
             } else {
-                Node<K> nodeToDelete = internalMap.get(index);
-                Node<K> oldPrev = nodeToDelete.prev;
-                Node<K> oldNext = nodeToDelete.next;
-                if (oldPrev != null && oldNext != null) { // Если в центре списка
-                    oldPrev.next = oldNext;
-                    oldNext.prev = oldPrev;
-                } else if (oldPrev == null && oldNext != null) { // если начало списка, а не одна запись
-                    head = nodeToDelete.next;
-                    head.prev = null;
-                } else if (oldPrev != null) { // если конец списка
-                    oldPrev.next = null;
-                    tail = oldPrev;
-                } else { // Это единственная запись в истории
+
+                if (size == 1) { //Единственная запись
+
                     tail = null;
                     head = null;
+                } else {
+
+                    Node<K> nodeToDelete = internalMap.get(index);
+                    Node<K> oldPrev = nodeToDelete.prev;
+                    Node<K> oldNext = nodeToDelete.next;
+
+                    if (oldPrev != null && oldNext != null) { // Если в центре списка
+
+                        oldPrev.next = oldNext;
+                        oldNext.prev = oldPrev;
+                    } else if (oldPrev == null && oldNext != null) { // если начало списка, а не одна запись
+
+                        head = nodeToDelete.next;
+                        head.prev = null;
+                    } else if (oldPrev != null) { // если конец списка
+
+                        oldPrev.next = null;
+                        tail = oldPrev;
+                    }
+
+                    size--;
+                    internalMap.remove(index);
                 }
-                size--;
-                internalMap.remove(index);
             }
         }
 
         public void clear() {
 
             internalMap.clear();
+            size = 0;
 
         }
     }
@@ -140,10 +145,6 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
     public void remove(int mId) {
 
         historyMap.remove(mId);
-    }
-
-    public void removeNode(int index) {
-        historyMap.remove(index);
     }
 
 }

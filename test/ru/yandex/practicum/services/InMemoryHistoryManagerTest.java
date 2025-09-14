@@ -79,10 +79,11 @@ class InMemoryHistoryManagerTest {
 
 
         Epic epic1 = new Epic("Абсолютно новый эпик", "новый эпик");
-        inHM.add(epic1);
-        List<Task> listEpics = inHM.getHistory();
-        assertTrue(inHM.getHistory().contains(epic1), "Эпик не попал в список");
-        inHM.remove(epic1.getID());
+        int epic1ID = taskManagerTest.createEpic(epic1);
+        taskManagerTest.getEpicByID(epic1ID);
+        List<Task> listEpics = taskManagerTest.getHistory();
+        assertTrue(taskManagerTest.getHistory().contains(epic1), "Эпик не попал в список");
+        taskManagerTest.deleteElement(epic1ID, "EPIC");
         assertFalse(inHM.getHistory().contains(epic1), "Эпик не удалился из списка");
     }
 
