@@ -222,12 +222,12 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         switch (mType) {
             case "EPIC":
 
-                for (Integer subTaskNumber: subTaskList.keySet()){
+                for (Integer subTaskNumber: subTaskList.keySet()) {
                     inMemoryHistoryManager.remove(subTaskNumber);
                 }
                 subTaskList.clear(); // Все сабтаски принадлежат эпикам - потому удаляем их все
 
-                for(Integer epicNumber: epicList.keySet()){
+                for (Integer epicNumber: epicList.keySet()) {
                     inMemoryHistoryManager.remove(epicNumber);
                 }
                 epicList.clear();
@@ -235,14 +235,14 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                 break;
             case "TASK":
 
-                for(Integer taskNumber: taskList.keySet()){
+                for (Integer taskNumber: taskList.keySet()) {
                     inMemoryHistoryManager.remove(taskNumber);
                 }
                 taskList.clear();
                 break;
             case "SUB_TASK":
 
-                for (Integer subTaskNumber: subTaskList.keySet()){
+                for (Integer subTaskNumber: subTaskList.keySet()) {
                     inMemoryHistoryManager.remove(subTaskNumber);
                 }
                 subTaskList.clear();  //Очищаем все сабтакси и обновляем статус у Эпика
