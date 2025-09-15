@@ -32,21 +32,18 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
                 this.remove(index);
             }
             Node<K> oldTail = tail;
-            Node<K> newNode;
-            newNode = new Node<>(oldTail, task, null);
+            Node<K> newNode = new Node<>(oldTail, task, null);
+
             if (head != null) {
 
-                this.tail = newNode;
-                oldTail.next = newNode;
-                internalMap.put(index, newNode);
-                size++;
+                 oldTail.next = newNode;
             } else {                 // Первый элемент
 
-                this.tail = newNode;
                 this.head = newNode;
-                internalMap.put(index, newNode);
-                size++;
             }
+            this.tail = newNode;
+            internalMap.put(index, newNode);
+            size++;
         }
 
         public List<K> getHistory() {
@@ -91,10 +88,9 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
                         oldPrev.next = null;
                         tail = oldPrev;
                     }
-
-                    size--;
-                    internalMap.remove(index);
                 }
+                size--;
+                internalMap.remove(index);
             }
         }
 
