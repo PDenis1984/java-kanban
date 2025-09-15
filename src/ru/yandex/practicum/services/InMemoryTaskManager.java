@@ -7,7 +7,10 @@ import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.models.TaskState;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManagerIntf {
 
@@ -43,6 +46,15 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         if (!epicList.isEmpty()) {
             Epic epic = epicList.get(mID);
             inMemoryHistoryManager.add(epic);
+            return epic;
+        }
+        return null;
+    }
+
+    private Epic getEpicByIDForSubTask(int mID) {
+
+        if (!epicList.isEmpty()) {
+            Epic epic = epicList.get(mID);
             return epic;
         }
         return null;
@@ -142,7 +154,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
     public int createSubtask(SubTask mSubTask) {
 
         int subTaskID = getElementID();
-        Epic epic = getEpicByID(mSubTask.getEpicID());
+        Epic epic = getEpicByIDForSubTask(mSubTask.getEpicID());
         if (epic != null) {
             mSubTask.setID(subTaskID);
             subTaskList.put(subTaskID, mSubTask);
@@ -154,7 +166,6 @@ public class InMemoryTaskManager implements TaskManagerIntf {
             return -1;
         }
     }
-
 
     // Удаление
     @Override
@@ -168,8 +179,10 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                     ArrayList<Integer> subTaskNumbers = epic.getAllSubTask();
                     for (Integer subTaskNumber : subTaskNumbers) {
                         subTaskList.remove(subTaskNumber);
+                        inMemoryHistoryManager.remove(subTaskNumber);
                     }
                     epicList.remove(mID);
+                    inMemoryHistoryManager.remove(mID);
                 } else {
                     System.out.println("Передан неверный номер Эпика");
                 }
@@ -178,6 +191,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
 
                 if (taskList.containsKey(mID)) {
                     taskList.remove(mID);
+                    inMemoryHistoryManager.remove(mID);
                 } else {
                     System.out.println("Передан неверный номер Задачи: " + mID);
                 }
@@ -191,11 +205,13 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                         epic.deleteSubTaskByID(mID);
                         recountEpicState(epic);
                     }
+                    inMemoryHistoryManager.remove(mID);
                 } else {
                     System.out.println("Передан неверный номер Подзадачи");
                 }
                 break;
             default:
+
                 System.out.println("Передан неверный тип задачи");
         }
     }
@@ -206,17 +222,36 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         switch (mType) {
             case "EPIC":
 
+                for (Integer subTaskNumber: subTaskList.keySet()) {
+
+                    inMemoryHistoryManager.remove(subTaskNumber);
+                }
                 subTaskList.clear(); // Все сабтаски принадлежат эпикам - потому удаляем их все
+
+                for (Integer epicNumber: epicList.keySet()) {
+
+                    inMemoryHistoryManager.remove(epicNumber);
+                }
                 epicList.clear();
+
                 break;
             case "TASK":
 
+                for (Integer taskNumber: taskList.keySet()) {
+
+                    inMemoryHistoryManager.remove(taskNumber);
+                }
                 taskList.clear();
                 break;
             case "SUB_TASK":
 
+                for (Integer subTaskNumber: subTaskList.keySet()) {
+
+                    inMemoryHistoryManager.remove(subTaskNumber);
+                }
                 subTaskList.clear();  //Очищаем все сабтакси и обновляем статус у Эпика
                 for (Epic epic : epicList.values()) {
+
                     epic.deleteAllSubTask();
                     recountEpicState(epic);
                 }

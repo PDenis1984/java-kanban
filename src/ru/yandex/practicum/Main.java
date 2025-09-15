@@ -1,8 +1,10 @@
 package ru.yandex.practicum;
 
 import ru.yandex.practicum.intf.TaskManagerIntf;
-import ru.yandex.practicum.models.*;
-import ru.yandex.practicum.services.InMemoryTaskManager;
+import ru.yandex.practicum.models.Epic;
+import ru.yandex.practicum.models.SubTask;
+import ru.yandex.practicum.models.Task;
+import ru.yandex.practicum.models.TaskState;
 import ru.yandex.practicum.services.Managers;
 
 public class Main {
@@ -94,8 +96,6 @@ public class Main {
         taskManager.printAllElements("TASK");
         taskManager.printAllElements("EPIC");
         taskManager.printAllElements("SUB_TASK");
-
-
 
 
         //Удаление всех задач

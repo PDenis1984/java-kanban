@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.services.InMemoryTaskManager;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TaskTest {
 
@@ -16,6 +16,7 @@ class TaskTest {
         taskManagerTest = new InMemoryTaskManager();
         FillTaskTest.fillTasks(taskManagerTest);
     }
+
     @Test
     void testEquals() {
         Task task1 = taskManagerTest.getTaskByID(6);

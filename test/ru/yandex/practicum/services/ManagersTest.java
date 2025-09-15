@@ -3,7 +3,7 @@ package ru.yandex.practicum.services;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.intf.TaskManagerIntf;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class ManagersTest {
 
@@ -11,6 +11,6 @@ class ManagersTest {
     void getManager() {
         TaskManagerIntf inMTM = Managers.getManager();
         assertNotNull(inMTM, "InMemoryTaskManager Не создан");
-;
+        ;
     }
 }
