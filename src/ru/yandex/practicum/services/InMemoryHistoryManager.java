@@ -25,10 +25,6 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
             internalMap = new HashMap<>();
         }
 
-        public void add(int index, K body) {
-
-
-        }
 
         public void linkLast(int index, K task) {
 
@@ -36,19 +32,16 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
                 this.remove(index);
             }
             Node<K> oldTail = tail;
-
+            Node<K> newNode;
+            newNode = new Node<>(oldTail, task, null);
             if (head != null) {
 
-                Node<K> newNode = new Node<>(oldTail, task, null);
                 this.tail = newNode;
                 oldTail.next = newNode;
-                newNode.prev = oldTail;
                 internalMap.put(index, newNode);
                 size++;
             } else {                 // Первый элемент
 
-                Node<K> newNode;
-                newNode = new Node<>(null, task, null);
                 this.tail = newNode;
                 this.head = newNode;
                 internalMap.put(index, newNode);
@@ -60,7 +53,9 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
 
             List<K> result = new ArrayList<>();
             Node<K> current = head;
+
             while (current != null) {
+
                 result.add(current.data);
                 current = current.next;
             }
