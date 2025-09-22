@@ -8,7 +8,9 @@ import ru.yandex.practicum.models.*;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 class FileBackedTaskManagerTest {
 
     static TaskManagerIntf fileBackedTaskManager;
@@ -29,16 +31,16 @@ class FileBackedTaskManagerTest {
     @Test
     void isCreatedTest() {
 
-        Epic epic  =  new Epic("Купить в магазине", "Покупки");
+        Epic epic = new Epic("Купить в магазине", "Покупки");
         int epicID = fileBackedTaskManager.createEpic(epic);
         SubTask subTask = new SubTask("Купить пасту", "Покупка 1", epicID, TaskState.IN_PROGRESS);
         int subTaskID = fileBackedTaskManager.createSubTask(subTask);
         Task task = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
-        int taskID  = fileBackedTaskManager.createTask(task);
+        int taskID = fileBackedTaskManager.createTask(task);
 
         //все они должны быть в файле
         // Создаем новый менеджер из того файла, в который сохраняли
-        FileBackedTaskManager checkFileBackedManager = FileBackedTaskManager.loadFromFile(new File ("task.csv"));
+        FileBackedTaskManager checkFileBackedManager = FileBackedTaskManager.loadFromFile(new File("task.csv"));
         assertTrue(checkFileBackedManager.taskList.containsKey(taskID), "Задача не найдена");
         assertTrue(checkFileBackedManager.subTaskList.containsKey(subTaskID), "Подзадача не найдена");
         assertTrue(checkFileBackedManager.epicList.containsKey(epicID), "Эпик не найден");
@@ -48,10 +50,10 @@ class FileBackedTaskManagerTest {
     @Test
     void isUpdatedTaskTest() { //проверяем обновление
 
-        Epic  epic = fileBackedTaskManager.getEpicByID(3);
+        Epic epic = fileBackedTaskManager.getEpicByID(3);
         epic.setDescription("Сократим текст");
         fileBackedTaskManager.updateEpic(epic);
-        FileBackedTaskManager checkFileBackedManager = FileBackedTaskManager.loadFromFile(new File ("task.csv"));
+        FileBackedTaskManager checkFileBackedManager = FileBackedTaskManager.loadFromFile(new File("task.csv"));
 
         Epic epicCheck = checkFileBackedManager.getEpicByID(3);
         assertEquals(epic, epicCheck, "Эпики не совпадают");

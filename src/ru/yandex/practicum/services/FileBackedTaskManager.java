@@ -5,14 +5,13 @@ import ru.yandex.practicum.models.*;
 import ru.yandex.practicum.models.exceptioons.ManagerSaveException;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManagerIntf {
 
     // отложим private final static String FILE_NAME = "tasks.csv";
-    private final static String FILE_HEADER = "id,type,name,status,description,epic\n";
+    private static final String FILE_HEADER = "id,type,name,status,description,epic\n";
     private String fileName;
     //creates
 
@@ -41,9 +40,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
     @Override
     public int createSubTask(SubTask mSubTask) {
 
-        int SubTaskID = super.createSubTask(mSubTask);
+        int subTaskID = super.createSubTask(mSubTask);
         save();
-        return SubTaskID;
+        return subTaskID;
     }
 
     //Updates
@@ -123,10 +122,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         } else if (task instanceof Epic) {
             taskType = TaskType.EPIC;
         }
-        sbTask.append(String.valueOf(taskType)).append(',').
-                append(task.getName()).append(",").
-                append(String.valueOf(task.getState())).append(",").
-                append(task.getDescription()).append(",");
+        sbTask.append(String.valueOf(taskType)).append(',')
+                .append(task.getName()).append(",")
+                .append(String.valueOf(task.getState())).append(",")
+                .append(task.getDescription()).append(",");
 
         if (taskType.equals(TaskType.SUBTASK)) {
 
@@ -177,10 +176,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 fBTManager.recountEpicState(epic);
             }
 
-        } catch (FileNotFoundException fEx) {
+        } catch (FileNotFoundException fException) {
 
             System.out.println("Файл " + file.getName() + " не найден");
-        } catch (IOException e) {
+        } catch (IOException iOException) {
 
             System.out.println("Произошла ошибка при чтении файла");
         }
