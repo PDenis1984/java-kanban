@@ -176,10 +176,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                 fBTManager.recountEpicState(epic);
             }
 
-        } catch (FileNotFoundException fException) {
+        } catch (FileNotFoundException findReadException) {
 
             System.out.println("Файл " + file.getName() + " не найден");
-        } catch (IOException iOException) {
+        } catch (IOException readException) {
 
             System.out.println("Произошла ошибка при чтении файла");
         }
