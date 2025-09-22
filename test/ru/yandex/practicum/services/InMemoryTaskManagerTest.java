@@ -15,7 +15,7 @@ class InMemoryTaskManagerTest {
     @BeforeAll
     static void beforeAll() {
 
-        taskManagerTest = Managers.getManager();
+        taskManagerTest = Managers.getManager(ManagersType.InMemory);
         FillTaskTest.fillTasks(taskManagerTest);
     }
 
@@ -60,7 +60,7 @@ class InMemoryTaskManagerTest {
         Epic epic = new Epic("Приготовить обед", "Комплексный обед");
         int epicID = taskManagerTest.createEpic(epic);
         SubTask subTask = new SubTask("Борщ", "Мясо,  свекла, овощи", epicID, TaskState.NEW);
-        int subTaskID = taskManagerTest.createSubtask(subTask);
+        int subTaskID = taskManagerTest.createSubTask(subTask);
         assertEquals(subTask, taskManagerTest.getSubTaskByID(subTaskID));
     }
 }

@@ -1,0 +1,7 @@
+id,type,name,status,description,epic
+1,TASK,Сходить в магазин,IN_PROGRESS,За хлебом,
+2,TASK,Починить дверь,NEW,Вставить глазок и замок,
+3,EPIC,Подготовка к зачету,IN_PROGRESS,Сократим текст,
+4,SUBTASK,Изучение параграфа 1,NEW,Страница 1,3
+5,SUBTASK,Решить задачу,IN_PROGRESS,Задача  номер 2,3
+6,SUBTASK,Решить интеграл,IN_PROGRESS,Интеграл номер 3,3

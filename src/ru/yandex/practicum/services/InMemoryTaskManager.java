@@ -14,11 +14,12 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManagerIntf {
 
-    private int elementID; // Сквозная нумерация задач
-    private Map<Integer, Task> taskList;
-    private Map<Integer, Epic> epicList;
-    private Map<Integer, SubTask> subTaskList;
-    private HistoryManagerIntf inMemoryHistoryManager;
+    // Поменял на protected, чтобы
+    protected int elementID; // Сквозная нумерация задач
+    protected Map<Integer, Task> taskList;
+    protected Map<Integer, Epic> epicList;
+    protected Map<Integer, SubTask> subTaskList;
+    protected HistoryManagerIntf inMemoryHistoryManager;
 
     public InMemoryTaskManager() {
         taskList = new HashMap<Integer, Task>();
@@ -151,7 +152,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
     }
 
     @Override
-    public int createSubtask(SubTask mSubTask) {
+    public int createSubTask(SubTask mSubTask) {
 
         int subTaskID = getElementID();
         Epic epic = getEpicByIDForSubTask(mSubTask.getEpicID());
@@ -196,7 +197,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                     System.out.println("Передан неверный номер Задачи: " + mID);
                 }
                 break;
-            case "SUB_TASK":
+            case "SUBTASK":
 
                 if (subTaskList.containsKey(mID)) {
                     subTaskList.remove(mID);
