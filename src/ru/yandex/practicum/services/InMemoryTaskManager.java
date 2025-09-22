@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class InMemoryTaskManager implements TaskManagerIntf {
 
-    // Поменял на protected, чтобы
+    // Поменял на protected, чтобы использовать в файловом менеджере
     protected int elementID; // Сквозная нумерация задач
     protected Map<Integer, Task> taskList;
     protected Map<Integer, Epic> epicList;

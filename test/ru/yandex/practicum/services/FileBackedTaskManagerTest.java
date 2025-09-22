@@ -5,11 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.*;
+import ru.yandex.practicum.models.exceptioons.ManagerSaveException;
 
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FileBackedTaskManagerTest {
 
@@ -62,7 +63,7 @@ class FileBackedTaskManagerTest {
 
 
     @Test
-    void deleteAllElementsTest() { //проверяем удаление в файле, внутри общего удаления вызывается удаление конкретной таски
+    void isDeleteAllElementsTest() { //проверяем удаление в файле, внутри общего удаления вызывается удаление конкретной таски
 
         fileBackedTaskManager.deleteAllElements("TASK");
         assertTrue(fileBackedTaskManager.getAllTasks().isEmpty(), "Задачи из файла не удалены");
@@ -74,6 +75,4 @@ class FileBackedTaskManagerTest {
         assertTrue(fileBackedTaskManager.getAllSubTasks().isEmpty(), "Подзадачи из файла не удалены");
 
     }
-
-
 }

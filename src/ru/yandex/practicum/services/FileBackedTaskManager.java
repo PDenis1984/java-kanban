@@ -1,6 +1,5 @@
 package ru.yandex.practicum.services;
 
-import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.*;
 import ru.yandex.practicum.models.exceptioons.ManagerSaveException;
 
@@ -8,12 +7,12 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
-public class FileBackedTaskManager extends InMemoryTaskManager implements TaskManagerIntf {
+public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    // отложим private final static String FILE_NAME = "tasks.csv";
     private static final String FILE_HEADER = "id,type,name,status,description,epic\n";
-    private String fileName;
-    //creates
+    private final String fileName;
+
+    //Создание
 
     public FileBackedTaskManager(String fileName) {
 
@@ -45,7 +44,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         return subTaskID;
     }
 
-    //Updates
+    //Обновление
     @Override
     public void updateEpic(Epic mEpic) {
 
@@ -89,7 +88,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         allTasks.addAll(getAllEpic());
         allTasks.addAll(getAllSubTasks());
 
-        try (BufferedWriter bfWriter = new BufferedWriter(new FileWriter(fileName, StandardCharsets.UTF_8));) {
+        try (BufferedWriter bfWriter = new BufferedWriter(new FileWriter(fileName, StandardCharsets.UTF_8))) {
 
             bfWriter.flush();
             bfWriter.append(FILE_HEADER);
@@ -98,7 +97,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
 
                 writeString = taskToString(task) + "\n";
                 bfWriter.append(writeString);
-
             }
         } catch (IOException ioEX) {
             System.out.println("Произошла ошибка при записи файла " + fileName);
@@ -134,20 +132,25 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
         return sbTask.toString();
     }
 
-    //
-//        return task;
-//    }
+
     // Конструктор создает пустой менеджер. Здесь создаем менеджер и наполняем его задачами
-    static FileBackedTaskManager loadFromFile(File file) {
+    public static FileBackedTaskManager loadFromFile(File file) {
 
         FileBackedTaskManager fBTManager = new FileBackedTaskManager(file.getName());
         try {
             BufferedReader bfReader = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8));
             bfReader.readLine();
+            int maxTaskNumber = 1;
             while (bfReader.ready()) {
 
                 String[] fileRecord = bfReader.readLine().split(",");
                 int elementID = Integer.parseInt(fileRecord[0]);
+
+                if (elementID > maxTaskNumber) {
+
+                    maxTaskNumber = elementID;
+                }
+
                 switch (fileRecord[1]) {
 
                     case "TASK":
@@ -171,17 +174,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager implements TaskMa
                         break;
                 }
             }
+
+            for (SubTask subTask: fBTManager.getAllSubTasks()) {
+
+                int subTaskID = subTask.getID();
+                fBTManager.getEpicBySubTaskID(subTaskID).addSubTask(subTaskID);
+            }
             for (Epic epic : fBTManager.getAllEpic()) {
 
                 fBTManager.recountEpicState(epic);
             }
 
+            fBTManager.elementID = maxTaskNumber + 1;
+
         } catch (FileNotFoundException findReadException) {
 
             System.out.println("Файл " + file.getName() + " не найден");
+            throw  new ManagerSaveException("Файл " + file.getName() + " не найден");
         } catch (IOException readException) {
 
-            System.out.println("Произошла ошибка при чтении файла");
+            System.out.println("Произошла ошибка при чтении файла " + file.getName());
+            throw  new ManagerSaveException("Произошла ошибка при чтении файла " + file.getName());
         }
         return fBTManager;
     }
