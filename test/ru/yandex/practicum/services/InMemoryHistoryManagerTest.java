@@ -18,7 +18,7 @@ class InMemoryHistoryManagerTest {
     @BeforeAll
     static void beforeAll() {
 
-        taskManagerTest = Managers.getManager();
+        taskManagerTest = Managers.getManager(ManagersType.InMemory);
         FillTaskTest.fillTasks(taskManagerTest);
         inHM = new InMemoryHistoryManager();
     }
@@ -94,13 +94,13 @@ class InMemoryHistoryManagerTest {
         int epic1ID = taskManagerTest.createEpic(epic1);
 
         SubTask subTask1 = new SubTask("Изучение параграфа 1", "Страница 1", epic1.getID(), TaskState.NEW);
-        int subTask1ID = taskManagerTest.createSubtask(subTask1);
+        int subTask1ID = taskManagerTest.createSubTask(subTask1);
 
         SubTask subTask2 = new SubTask("Решить задачу", "Задача  номер 2", epic1ID, TaskState.IN_PROGRESS);
-        int subTask2ID = taskManagerTest.createSubtask(subTask2);
+        int subTask2ID = taskManagerTest.createSubTask(subTask2);
 
         SubTask subTask3 = new SubTask("Решить интеграл", "Интеграл номер 3", epic1ID, TaskState.IN_PROGRESS);
-        int subTask3ID = taskManagerTest.createSubtask(subTask3);
+        int subTask3ID = taskManagerTest.createSubTask(subTask3);
 
         taskManagerTest.getEpicByID(epic1ID);
         taskManagerTest.getSubTaskByID(subTask1ID);

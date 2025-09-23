@@ -12,8 +12,7 @@ import java.util.Map;
 public class InMemoryHistoryManager implements HistoryManagerIntf {
 
     // Утилитный класс для работы с историей
-    static class IndexedHashMap<K> {
-
+    protected static class IndexedHashMap<K> {
 
         private final Map<Integer, Node<K>> internalMap;
         private Node<K> head; // Начало списка
@@ -98,7 +97,6 @@ public class InMemoryHistoryManager implements HistoryManagerIntf {
 
             internalMap.clear();
             size = 0;
-
         }
     }
 

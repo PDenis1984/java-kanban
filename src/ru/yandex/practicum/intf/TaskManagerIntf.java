@@ -29,7 +29,7 @@ public interface TaskManagerIntf {
 
     int createTask(Task mTask);
 
-    int createSubtask(SubTask mSubTask);
+    int createSubTask(SubTask mSubTask);
 
     // Удаление
     void deleteElement(int mID, String mType);

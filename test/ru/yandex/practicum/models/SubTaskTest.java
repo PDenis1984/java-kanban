@@ -14,7 +14,7 @@ class SubTaskTest {
     @BeforeAll
     static void beforeAll() {
 
-        taskManagerTest = Managers.getManager();
+        taskManagerTest = Managers.getManager(ManagersType.InMemory);
         FillTaskTest.fillTasks(taskManagerTest);
     }
 
