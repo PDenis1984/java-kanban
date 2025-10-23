@@ -4,10 +4,7 @@ import ru.yandex.practicum.intf.HistoryManagerIntf;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.utils.Node;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InMemoryHistoryManager implements HistoryManagerIntf {
 

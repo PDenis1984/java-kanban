@@ -9,7 +9,7 @@ import java.util.List;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
-    private static final String FILE_HEADER = "id,type,name,status,description,epic\n";
+    private static final String FILE_HEADER = "id,type,name,status,description,epic, startTime, Duration, endTime\n";
     private final String fileName;
 
     //Создание

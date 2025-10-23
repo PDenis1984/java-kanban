@@ -1,12 +1,22 @@
 <component name="libraryTable">
   <library name="testlib">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../../../lib/testlib" />
+      <root url="file://$USER_HOME$/lib/testlib" />
+      <root url="jar://$USER_HOME$/lib/tests/apiguardian-api-1.0.0.jar!/" />
+      <root url="jar://$USER_HOME$/lib/tests/junit-jupiter-api-5.4.2.jar!/" />
+      <root url="jar://$USER_HOME$/lib/tests/junit-jupiter-engine-5.4.2.jar!/" />
+      <root url="jar://$USER_HOME$/lib/tests/junit-jupiter-params-5.4.2.jar!/" />
+      <root url="jar://$USER_HOME$/lib/tests/junit-platform-commons-1.4.2.jar!/" />
+      <root url="jar://$USER_HOME$/lib/tests/junit-platform-engine-1.4.2.jar!/" />
+      <root url="jar://$USER_HOME$/lib/tests/opentest4j-1.1.1.jar!/" />
     </CLASSES>
-    <JAVADOC />
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/lib/tests/apiguardian-api-1.0.0-javadoc.jar!/" />
+      <root url="jar://$USER_HOME$/lib/tests/opentest4j-1.1.1-javadoc.jar!/" />
+    </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/.ideaLibSources/junit-platform-commons-1.8.1-sources.jar!/" />
     </SOURCES>
-    <jarDirectory url="file://$PROJECT_DIR$/../../../lib/testlib" recursive="false" />
+    <jarDirectory url="file://$USER_HOME$/lib/testlib" recursive="false" />
   </library>
 </component>

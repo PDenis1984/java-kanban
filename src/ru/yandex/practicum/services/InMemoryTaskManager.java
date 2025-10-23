@@ -7,10 +7,9 @@ import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.models.TaskState;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.sound.midi.Soundbank;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManagerIntf {
 
@@ -20,12 +19,14 @@ public class InMemoryTaskManager implements TaskManagerIntf {
     protected Map<Integer, Epic> epicList;
     protected Map<Integer, SubTask> subTaskList;
     protected HistoryManagerIntf inMemoryHistoryManager;
+    protected Set<Task> priritizeTasks;
 
     public InMemoryTaskManager() {
         taskList = new HashMap<Integer, Task>();
         epicList = new HashMap<Integer, Epic>();
         subTaskList = new HashMap<Integer, SubTask>();
         elementID = 0;
+        priritizeTasks = new TreeSet<>(Comparator.comparing(Task::getStartTime));
         this.inMemoryHistoryManager = Managers.getDefaultHistoryManager();
     }
 
@@ -148,6 +149,9 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         int taskID = getElementID();
         mTask.setID(taskID);
         taskList.put(taskID, mTask);
+        if (mTask.getStartTime() !=null) {
+            priritizeTasks.add(mTask);
+        }
         return taskID;
     }
 
@@ -160,6 +164,10 @@ public class InMemoryTaskManager implements TaskManagerIntf {
             mSubTask.setID(subTaskID);
             subTaskList.put(subTaskID, mSubTask);
             epic.addSubTask(subTaskID);
+            if(mSubTask.getStartTime() != null) {
+                priritizeTasks.add(mSubTask);
+                recountEpicTimes(epic);
+            }
             recountEpicState(epic);
             return subTaskID;
         } else {
@@ -357,6 +365,18 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         }
     }
 
+    protected void recountEpicTimes(Epic mEpic, LocalDateTime newStartTime) {
+
+        Optional<SubTask> optSubTask = mEpic.getAllSubTask()
+                .stream()
+                .map(this::getSubTaskByID)
+                .filter(x->x.getStartTime().isBefore(newStartTime))
+                .findFirst();
+        if (optSubTask.isPresent()) {
+
+            System.out.println("Есть задачи младше");
+        }
+    }
     @Override
     public List<Task> getHistory() {
 

@@ -1,9 +1,12 @@
 package ru.yandex.practicum.models;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public final class Epic extends Task {
     private ArrayList<Integer> subTaskElements;
+    private LocalDateTime endTime;
 
     public Epic(String cName, String cDescription) {
         super(cName, cDescription, TaskState.NEW);
