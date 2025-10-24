@@ -65,7 +65,7 @@ public class Task {
         return this.startTime;
     }
 
-    public void SetStartTime(LocalDateTime starTime) {
+    public void setStartTime(LocalDateTime starTime) {
 
         this.startTime = starTime;
     }
@@ -75,7 +75,16 @@ public class Task {
         return this.startTime.plusMinutes(duration.toMinutes());
     }
 
+    public void setDuration (Duration mDuration) {
 
+        this.duration = mDuration;
+    }
+
+
+    public Duration getDuration() {
+
+        return this.duration;
+    }
     @Override
     public String toString() {
 

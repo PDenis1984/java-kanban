@@ -49,4 +49,14 @@ public final class Epic extends Task {
                 + "'; Подзадачи в эпике: " + subTaskElements;
         return result;
     }
+
+    public LocalDateTime getEndTime() {
+
+        return this.endTime;
+    }
+
+    public void setEndTime(LocalDateTime endTime) {
+
+        this.endTime = endTime;
+    }
 }

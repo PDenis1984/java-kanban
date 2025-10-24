@@ -6,8 +6,10 @@ import ru.yandex.practicum.models.Epic;
 import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.models.TaskState;
+import ru.yandex.practicum.models.exceptioons.TaskOverlapException;
 
 import javax.sound.midi.Soundbank;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -166,7 +168,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
             epic.addSubTask(subTaskID);
             if(mSubTask.getStartTime() != null) {
                 priritizeTasks.add(mSubTask);
-                recountEpicTimes(epic);
+                recountEpicTimes(epic, mSubTask.getStartTime(), mSubTask.getDuration());
             }
             recountEpicState(epic);
             return subTaskID;
@@ -365,17 +367,26 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         }
     }
 
-    protected void recountEpicTimes(Epic mEpic, LocalDateTime newStartTime) {
+    protected void recountEpicTimes(Epic mEpic, LocalDateTime newStartTime, Duration duration) {
 
-        Optional<SubTask> optSubTask = mEpic.getAllSubTask()
-                .stream()
-                .map(this::getSubTaskByID)
-                .filter(x->x.getStartTime().isBefore(newStartTime))
-                .findFirst();
-        if (optSubTask.isPresent()) {
+        if (mEpic.getStartTime() == null) {
 
-            System.out.println("Есть задачи младше");
+            mEpic.setStartTime(newStartTime);
+            mEpic.setEndTime(newStartTime.plusMinutes(duration.toMinutes()));
+        } else {
+
+            Duration  durationBetween = Duration.between(mEpic.getStartTime(), newStartTime);
+            if (durationBetween.isNegative()) { //
+
+            }
         }
+    }
+
+    public boolean checkTaskOverlap(Task mTask) throws TaskOverlapException{
+
+        return priritizeTasks.stream()
+                .anyMatch(task -> mTask.getStartTime().isBefore(task.getStartTime())
+             && mTask.getEndTime().isAfter(mTask.getEndTime()));
     }
     @Override
     public List<Task> getHistory() {
