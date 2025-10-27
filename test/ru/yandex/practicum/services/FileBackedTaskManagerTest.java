@@ -5,14 +5,15 @@ import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.*;
 
-import java.io.File;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest extends TaskManagerTest{
+class FileBackedTaskManagerTest extends TaskManagerTest {
 
     static final String DATE_TIME_FORMATTER = "dd.MM.yyyy HH:mm:ss";
     static TaskManagerIntf fileBackedTaskManager;
@@ -75,6 +76,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest{
         assertTrue(fileBackedTaskManager.getAllSubTasks().isEmpty(), "Подзадачи из файла не удалены");
 
     }
+
     @Test
     @Override
     void getTaskByID() {
@@ -135,13 +137,20 @@ class FileBackedTaskManagerTest extends TaskManagerTest{
         task.setDuration(Duration.ofMinutes(4320)); //Три дня
         fileBackedTaskManager.createTask(task);
 
-        assertTrue(fileBackedTaskManager.);
+        assertTrue(fileBackedTaskManager.getPrioritizeTasks().contains(task), "Задача не попола в список приоритезации");
         Task task1 = new Task("Задача с пересечением", "Короткая пересекающаяся", TaskState.NEW);
         task1.setStartTime(startTime.plusMinutes(100));
         task1.setDuration(Duration.ofMinutes(20));
         fileBackedTaskManager.updateTask(task1);
-
-
-
+        assertFalse(fileBackedTaskManager.getPrioritizeTasks().contains(task1), "Задача не должна быть помещена в списке приоритезации");
     }
+
+    @Test
+    void isIOExceptionThrown() {
+
+        assertThrows(IOException.class, () -> {
+            BufferedReader bfWriter = new BufferedReader(new FileReader(new File("WroingFileName.txt"), StandardCharsets.UTF_8));
+        }, "Неверное имя файла");
+    }
+
 }

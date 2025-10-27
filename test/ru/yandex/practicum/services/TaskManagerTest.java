@@ -1,10 +1,6 @@
 package ru.yandex.practicum.services;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ru.yandex.practicum.intf.TaskManagerIntf;
-import ru.yandex.practicum.models.FillTaskTest;
-import ru.yandex.practicum.models.ManagersType;
 
 public abstract class TaskManagerTest {
 

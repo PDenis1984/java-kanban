@@ -21,6 +21,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         taskManagerTest = Managers.getManager(ManagersType.InMemory);
         FillTaskTest.fillTasks(taskManagerTest);
     }
+
     @Test
     @Override
     void getTaskByID() {
@@ -70,6 +71,7 @@ class InMemoryTaskManagerTest extends TaskManagerTest {
         int subTaskID = taskManagerTest.createSubTask(subTask);
         assertEquals(subTask, taskManagerTest.getSubTaskByID(subTaskID));
     }
+
     @Test
     @Override
     void isUpdatedTaskTest() {

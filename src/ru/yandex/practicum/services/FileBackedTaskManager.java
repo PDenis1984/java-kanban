@@ -183,7 +183,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                         Epic epic = new Epic(fileRecord[2], fileRecord[4]);
                         epic.setID(elementID);
-                        if(!"".equals(fileRecord[6])) {
+                        if (!"".equals(fileRecord[6])) {
 
                             epic.setStartTime(LocalDateTime.parse(fileRecord[6], DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)));
                             epic.setDuration(Duration.ofMinutes(Integer.parseInt(fileRecord[7])));
@@ -228,5 +228,10 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             throw new ManagerSaveException("Произошла ошибка при чтении файла " + file.getName());
         }
         return fBTManager;
+    }
+
+    @Override
+    public List<Task> getPrioritizeTasks() {
+        return super.getPrioritizeTasks();
     }
 }

@@ -1,12 +1,13 @@
 package ru.yandex.practicum;
 
 import ru.yandex.practicum.intf.TaskManagerIntf;
-import ru.yandex.practicum.models.*;
+import ru.yandex.practicum.models.Epic;
+import ru.yandex.practicum.models.SubTask;
+import ru.yandex.practicum.models.Task;
+import ru.yandex.practicum.models.TaskState;
 import ru.yandex.practicum.services.FileBackedTaskManager;
-import ru.yandex.practicum.services.Managers;
 
 import java.io.File;
-import java.time.LocalDateTime;
 
 public class Main {
 
@@ -16,14 +17,14 @@ public class Main {
         FileBackedTaskManager taskManager = new FileBackedTaskManager("tasks.txt");
         taskManager = FileBackedTaskManager.loadFromFile(new File("tasks.txt"));
         taskManager.save();
-        //        fillTasks(taskManager);
+        fillTasks(taskManager);
 
-//        System.out.println("Task1 : "  + taskManager.getTaskByID(1).toString());
-//        System.out.println("Task2 : "  + taskManager.getTaskByID(2).toString());
-//        System.out.println("Epic3 : "  + taskManager.getEpicByID(3).toString());
-//        System.out.println("SubTask4 : "  + taskManager.getSubTaskByID(4).toString());
-//        System.out.println("SubTask5 : "  + taskManager.getSubTaskByID(5).toString());
-//        System.out.println("Epic6 : "  + taskManager.getSubTaskByID(6).toString());
+        System.out.println("Task1 : "  + taskManager.getTaskByID(1).toString());
+        System.out.println("Task2 : "  + taskManager.getTaskByID(2).toString());
+        System.out.println("Epic3 : "  + taskManager.getEpicByID(3).toString());
+        System.out.println("SubTask4 : "  + taskManager.getSubTaskByID(4).toString());
+        System.out.println("SubTask5 : "  + taskManager.getSubTaskByID(5).toString());
+        System.out.println("Epic6 : "  + taskManager.getSubTaskByID(6).toString());
 
 
 

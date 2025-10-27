@@ -79,7 +79,7 @@ public class Task {
         }
     }
 
-    public void setDuration (Duration mDuration) {
+    public void setDuration(Duration mDuration) {
 
         this.duration = mDuration;
     }
@@ -89,6 +89,7 @@ public class Task {
 
         return this.duration;
     }
+
     @Override
     public String toString() {
 

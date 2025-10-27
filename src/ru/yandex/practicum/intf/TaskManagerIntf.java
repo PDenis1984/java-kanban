@@ -46,4 +46,6 @@ public interface TaskManagerIntf {
     List<Task> getHistory();
 
     void printAllElements(String taskType);
+
+    List<Task> getPrioritizeTasks();
 }
