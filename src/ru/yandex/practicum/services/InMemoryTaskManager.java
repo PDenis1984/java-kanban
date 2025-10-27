@@ -11,6 +11,7 @@ import ru.yandex.practicum.models.exceptioons.TaskOverlapException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class InMemoryTaskManager implements TaskManagerIntf {
 
@@ -163,7 +164,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                     throw new TaskOverlapException("Задача пересекается по времени с уже существующей");//Подумать над выносом в интерфейс
                 }
             }
-        }catch (TaskOverlapException tOEx) {
+        } catch (TaskOverlapException tOEx) {
 
             System.out.println(tOEx.getMessage());
         }
@@ -191,7 +192,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                         throw new TaskOverlapException("Подзадача пересекается по времени с уже существующей");//Подумать над выносом в интерфейс
                     }
                 }
-            }catch (TaskOverlapException tOEx) {
+            } catch (TaskOverlapException tOEx) {
 
                 System.out.println(tOEx.getMessage());
             }
@@ -325,7 +326,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
 
         if (taskList.containsKey(mTask.getID())) {
             taskList.put(mTask.getID(), mTask);
-            if(mTask.getStartTime()!=null) {
+            if (mTask.getStartTime() != null) {
                 addPrioritizeTask(mTask);
             }
         } else {
@@ -343,7 +344,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                 Epic epic = epicList.get(mSubTask.getEpicID());
                 recountEpicState(epic);
 
-                if (mSubTask.getStartTime()!=null) {
+                if (mSubTask.getStartTime() != null) {
 
                     addPrioritizeTask(mSubTask);
                     recountEpicTimes(epic);
@@ -431,14 +432,14 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         mEpic.setDuration(duration);
     }
 
-    public boolean checkTaskOverlap(Task mTask) throws TaskOverlapException {
+    public boolean checkTaskOverlap(Task mTask) {
 
-        // Если время начала задачи - меньша startTime и время окончания меньше startTime, а также если време начала задачаи больше endTtime
-        //то это непересекающаяся задача. если есть хоты бы одно исклчение - то задача пересекается
+        // Если время начала задачи - меньша startTime и время окончания меньше startTime, а также если время начала задачи больше endTime
+        //то это непересекающаяся задача. если есть хоты бы одно исключение - то задача пересекается
 
         return !prioritizeTasks.stream()
-                .allMatch(task -> (mTask.getStartTime().isBefore(task.getStartTime())&& mTask.getEndTime().isBefore(mTask.getStartTime()))
-                 || (mTask.getStartTime().isAfter(task.getStartTime())));
+                .allMatch(task -> (mTask.getStartTime().isBefore(task.getStartTime()) && mTask.getEndTime().isBefore(mTask.getStartTime()))
+                        || (mTask.getStartTime().isAfter(task.getStartTime())));
     }
 
     private void addPrioritizeTask(Task mTAsk) {
@@ -448,9 +449,18 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         }
         prioritizeTasks.add(mTAsk);
     }
+
     @Override
     public List<Task> getHistory() {
 
         return inMemoryHistoryManager.getHistory();
+    }
+
+    public List<Task> getPrioritizeTasks() {
+
+
+        return new ArrayList<Task>(this.prioritizeTasks.stream()
+                .peek(x-> this.inMemoryHistoryManager.add(x))
+                .toList());
     }
 }

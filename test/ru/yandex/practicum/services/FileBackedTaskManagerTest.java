@@ -1,19 +1,20 @@
 package ru.yandex.practicum.services;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.*;
-import ru.yandex.practicum.models.exceptioons.ManagerSaveException;
 
-import java.io.*;
-import java.nio.charset.StandardCharsets;
+import java.io.File;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
+class FileBackedTaskManagerTest extends TaskManagerTest{
 
+    static final String DATE_TIME_FORMATTER = "dd.MM.yyyy HH:mm:ss";
     static TaskManagerIntf fileBackedTaskManager;
 
 
@@ -22,15 +23,13 @@ class FileBackedTaskManagerTest {
 
         fileBackedTaskManager = new FileBackedTaskManager("task.csv");
         FillTaskTest.fillTasks(fileBackedTaskManager);
-    }
-
-    @AfterEach
-    void tearDown() {
 
     }
+
 
     @Test
     void isCreatedTest() {
+
 
         Epic epic = new Epic("Купить в магазине", "Покупки");
         int epicID = fileBackedTaskManager.createEpic(epic);
@@ -49,6 +48,7 @@ class FileBackedTaskManagerTest {
 
 
     @Test
+    @Override
     void isUpdatedTaskTest() { //проверяем обновление
 
         Epic epic = fileBackedTaskManager.getEpicByID(3);
@@ -73,6 +73,75 @@ class FileBackedTaskManagerTest {
 
         fileBackedTaskManager.deleteAllElements("SUB_TASK");
         assertTrue(fileBackedTaskManager.getAllSubTasks().isEmpty(), "Подзадачи из файла не удалены");
+
+    }
+    @Test
+    @Override
+    void getTaskByID() {
+
+        Task task1 = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
+        int taskID = fileBackedTaskManager.createTask(task1);
+        Task task2 = fileBackedTaskManager.getTaskByID(taskID);
+        assertNotNull(task2, "Задача не найдена");
+    }
+
+    @Test
+    @Override
+    void getEpicByID() {
+
+        Epic epic1 = new Epic("Приготовить обед", "Комплексный обед");
+        int epic1ID = fileBackedTaskManager.createEpic(epic1);
+        Epic epic2 = fileBackedTaskManager.getEpicByID(epic1ID);
+        assertNotNull(epic2, "Эпик не найден");
+    }
+
+
+    @Test
+    @Override
+    void createEpic() {
+
+        Epic epic = new Epic("Приготовить обед", "Комплексный обед");
+        int epicID = fileBackedTaskManager.createEpic(epic);
+        assertEquals(epic, fileBackedTaskManager.getEpicByID(epicID));
+    }
+
+    @Test
+    @Override
+    void createTask() {
+
+        Task task = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
+        int taskID = fileBackedTaskManager.createTask(task);
+        assertEquals(task, fileBackedTaskManager.getTaskByID(taskID));
+    }
+
+    @Test
+    @Override
+    void createSubtask() {
+
+        Epic epic = new Epic("Приготовить обед", "Комплексный обед");
+        int epicID = fileBackedTaskManager.createEpic(epic);
+        SubTask subTask = new SubTask("Борщ", "Мясо,  свекла, овощи", epicID, TaskState.NEW);
+        int subTaskID = fileBackedTaskManager.createSubTask(subTask);
+        assertEquals(subTask, fileBackedTaskManager.getSubTaskByID(subTaskID));
+    }
+
+    @Test
+    @Override
+    void isTimeOverlapFound() {
+
+        Task task = new Task("Долгая по времени задача", "Долгая длится больше трех дней", TaskState.IN_PROGRESS);
+        LocalDateTime startTime = LocalDateTime.parse("12.10.2024 12:10:30", DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER));
+        task.setStartTime(startTime);
+        task.setDuration(Duration.ofMinutes(4320)); //Три дня
+        fileBackedTaskManager.createTask(task);
+
+        assertTrue(fileBackedTaskManager.);
+        Task task1 = new Task("Задача с пересечением", "Короткая пересекающаяся", TaskState.NEW);
+        task1.setStartTime(startTime.plusMinutes(100));
+        task1.setDuration(Duration.ofMinutes(20));
+        fileBackedTaskManager.updateTask(task1);
+
+
 
     }
 }

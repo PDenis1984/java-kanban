@@ -72,7 +72,11 @@ public class Task {
 
     public LocalDateTime getEndTime() {
 
-        return this.startTime.plusMinutes(duration.toMinutes());
+        if (this.getStartTime() != null) {
+            return this.startTime.plusMinutes(duration.toMinutes());
+        } else {
+            return null;
+        }
     }
 
     public void setDuration (Duration mDuration) {
