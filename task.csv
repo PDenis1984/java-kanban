@@ -1,6 +1,7 @@
 id, type, name, status, description, epic, startTime, Duration, endTime
 1,TASK,Сходить в магазин,IN_PROGRESS,За хлебом,,,0,
 2,TASK,Починить дверь,NEW,Вставить глазок и замок,,,0,
+7,TASK,Сходить в магазин,IN_PROGRESS,За хлебом,,,0,
 3,EPIC,Подготовка к зачету,IN_PROGRESS,Выучить необходимые параграфы_ решить задачи_ написать шпаргалки,,,0,
 4,SUBTASK,Изучение параграфа 1,NEW,Страница 1,3,,0,
 5,SUBTASK,Решить задачу,IN_PROGRESS,Задача  номер 2,3,,0,
