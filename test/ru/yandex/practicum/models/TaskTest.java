@@ -19,8 +19,8 @@ class TaskTest {
 
     @Test
     void testEquals() {
-        Task task1 = taskManagerTest.getTaskByID(6);
-        Task task2 = taskManagerTest.getTaskByID(6);
+        Task task1 = taskManagerTest.getTaskByID(6).orElse(null);
+        Task task2 = taskManagerTest.getTaskByID(6).orElse(null);
         assertEquals(task1, task2);
     }
 }

@@ -35,12 +35,12 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
         Epic epic = new Epic("Купить в магазине", "Покупки");
         int epicID = fileBackedTaskManager.createEpic(epic);
         SubTask subTask = new SubTask("Купить пасту", "Покупка 1", epicID, TaskState.IN_PROGRESS);
-        int subTaskID = fileBackedTaskManager.createSubTask(subTask);
+        int subTaskID = fileBackedTaskManager.createSubTask(subTask).orElse(-1);
         Task task = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
-        int taskID = fileBackedTaskManager.createTask(task);
+        int taskID = fileBackedTaskManager.createTask(task).orElse(-1);
 
-        //все они должны быть в файле
-        // Создаем новый менеджер из того файла, в который сохраняли
+        //Все они должны быть в файле.
+        // Создаем новый менеджер из того файла, в который сохраняли.
         FileBackedTaskManager checkFileBackedManager = FileBackedTaskManager.loadFromFile(new File("task.csv"));
         assertTrue(checkFileBackedManager.taskList.containsKey(taskID), "Задача не найдена");
         assertTrue(checkFileBackedManager.subTaskList.containsKey(subTaskID), "Подзадача не найдена");
@@ -52,12 +52,15 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
     @Override
     void isUpdatedTaskTest() { //проверяем обновление
 
-        Epic epic = fileBackedTaskManager.getEpicByID(3);
-        epic.setDescription("Сократим текст");
+        Epic epic = fileBackedTaskManager.getEpicByID(3).orElse(null);
+
+        if (epic != null) {
+            epic.setDescription("Сократим текст");
+        }
         fileBackedTaskManager.updateEpic(epic);
         FileBackedTaskManager checkFileBackedManager = FileBackedTaskManager.loadFromFile(new File("task.csv"));
 
-        Epic epicCheck = checkFileBackedManager.getEpicByID(3);
+        Epic epicCheck = checkFileBackedManager.getEpicByID(3).orElse(null);
         assertEquals(epic, epicCheck, "Эпики не совпадают");
 
     }
@@ -82,8 +85,8 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
     void getTaskByID() {
 
         Task task1 = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
-        int taskID = fileBackedTaskManager.createTask(task1);
-        Task task2 = fileBackedTaskManager.getTaskByID(taskID);
+        int taskID = fileBackedTaskManager.createTask(task1).orElse(-1);
+        Task task2 = fileBackedTaskManager.getTaskByID(taskID).orElse(null);
         assertNotNull(task2, "Задача не найдена");
     }
 
@@ -93,7 +96,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
 
         Epic epic1 = new Epic("Приготовить обед", "Комплексный обед");
         int epic1ID = fileBackedTaskManager.createEpic(epic1);
-        Epic epic2 = fileBackedTaskManager.getEpicByID(epic1ID);
+        Epic epic2 = fileBackedTaskManager.getEpicByID(epic1ID).orElse(null);
         assertNotNull(epic2, "Эпик не найден");
     }
 
@@ -104,7 +107,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
 
         Epic epic = new Epic("Приготовить обед", "Комплексный обед");
         int epicID = fileBackedTaskManager.createEpic(epic);
-        assertEquals(epic, fileBackedTaskManager.getEpicByID(epicID));
+        assertEquals(epic, fileBackedTaskManager.getEpicByID(epicID).orElse(null));
     }
 
     @Test
@@ -112,8 +115,8 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
     void createTask() {
 
         Task task = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
-        int taskID = fileBackedTaskManager.createTask(task);
-        assertEquals(task, fileBackedTaskManager.getTaskByID(taskID));
+        int taskID = fileBackedTaskManager.createTask(task).orElse(-1);
+        assertEquals(task, fileBackedTaskManager.getTaskByID(taskID).orElse(null));
     }
 
     @Test
@@ -123,8 +126,8 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
         Epic epic = new Epic("Приготовить обед", "Комплексный обед");
         int epicID = fileBackedTaskManager.createEpic(epic);
         SubTask subTask = new SubTask("Борщ", "Мясо,  свекла, овощи", epicID, TaskState.NEW);
-        int subTaskID = fileBackedTaskManager.createSubTask(subTask);
-        assertEquals(subTask, fileBackedTaskManager.getSubTaskByID(subTaskID));
+        int subTaskID = fileBackedTaskManager.createSubTask(subTask).orElse(-1);
+        assertEquals(subTask, fileBackedTaskManager.getSubTaskByID(subTaskID).orElse(null));
     }
 
     @Test
@@ -137,19 +140,19 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
         task.setDuration(Duration.ofMinutes(4320)); //Три дня
         fileBackedTaskManager.createTask(task);
 
-        assertTrue(fileBackedTaskManager.getPrioritizeTasks().contains(task), "Задача не попола в список приоритезации");
+        assertTrue(fileBackedTaskManager.getPrioritizeTasks().contains(task), "Задача не попала в список приоритизации");
         Task task1 = new Task("Задача с пересечением", "Короткая пересекающаяся", TaskState.NEW);
         task1.setStartTime(startTime.plusMinutes(100));
         task1.setDuration(Duration.ofMinutes(20));
         fileBackedTaskManager.updateTask(task1);
-        assertFalse(fileBackedTaskManager.getPrioritizeTasks().contains(task1), "Задача не должна быть помещена в списке приоритезации");
+        assertFalse(fileBackedTaskManager.getPrioritizeTasks().contains(task1), "Задача не должна быть помещена в списке приоритизации");
     }
 
     @Test
     void isIOExceptionThrown() {
 
         assertThrows(IOException.class, () -> {
-            BufferedReader bfWriter = new BufferedReader(new FileReader(new File("WroingFileName.txt"), StandardCharsets.UTF_8));
+            BufferedReader bfWriter = new BufferedReader(new FileReader("WrongFileName.txt", StandardCharsets.UTF_8));
         }, "Неверное имя файла");
     }
 

@@ -5,16 +5,17 @@ import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskManagerIntf {
     // Набор для получения задач
-    Task getTaskByID(int mID);
+    Optional<Task>  getTaskByID(int mID);
 
-    Epic getEpicByID(int mID);
+    Optional<Epic> getEpicByID(int mID);
 
     Epic getEpicBySubTaskID(int mSubtaskID);
 
-    SubTask getSubTaskByID(int mSubTaskID);
+    Optional<SubTask> getSubTaskByID(int mSubTaskID);
 
     List<Epic> getAllEpic();
 
@@ -27,9 +28,9 @@ public interface TaskManagerIntf {
     //Создание задач всех типов
     int createEpic(Epic mEpic);
 
-    int createTask(Task mTask);
+    Optional<Integer> createTask(Task mTask);
 
-    int createSubTask(SubTask mSubTask);
+    Optional<Integer> createSubTask(SubTask mSubTask);
 
     // Удаление
     void deleteElement(int mID, String mType);

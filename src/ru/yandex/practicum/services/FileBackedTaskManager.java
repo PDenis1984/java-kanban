@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
@@ -34,19 +35,19 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     @Override
-    public int createTask(Task mTask) {
+    public Optional<Integer> createTask(Task mTask) {
 
-        int taskID = super.createTask(mTask);
+        Optional<Integer> taskID = super.createTask(mTask);
         save();
         return taskID;
     }
 
     @Override
-    public int createSubTask(SubTask mSubTask) {
+    public Optional<Integer> createSubTask(SubTask mSubTask) {
 
-        int subTaskID = super.createSubTask(mSubTask);
+        Optional<Integer> subTaskID = super.createSubTask(mSubTask);
         save();
-        return subTaskID;
+        return  subTaskID;
     }
 
     //Обновление
@@ -209,7 +210,8 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                 int subTaskID = subTask.getID();
                 int epicID = subTask.getEpicID();
-                fBTManager.getEpicByID(epicID).addSubTask(subTaskID);
+                fBTManager.getEpicByID(epicID).ifPresent(x -> x.addSubTask(subTaskID));
+
             }
             for (Epic epic : fBTManager.getAllEpic()) {
 
