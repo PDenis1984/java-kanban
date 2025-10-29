@@ -39,7 +39,7 @@ class InMemoryHistoryManagerTest {
 
         Task task1 = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
 
-        int task1ID = taskManagerTest.createTask(task1);
+        int task1ID = taskManagerTest.createTask(task1).orElse(-1);
         taskManagerTest.getTaskByID(task1ID);
         List<Task> taskList = taskManagerTest.getHistory();
         assertNotNull(taskList, "Список пуст и не проинициализирован!");
@@ -94,13 +94,13 @@ class InMemoryHistoryManagerTest {
         int epic1ID = taskManagerTest.createEpic(epic1);
 
         SubTask subTask1 = new SubTask("Изучение параграфа 1", "Страница 1", epic1.getID(), TaskState.NEW);
-        int subTask1ID = taskManagerTest.createSubTask(subTask1);
+        int subTask1ID = taskManagerTest.createSubTask(subTask1).orElse(-1);
 
         SubTask subTask2 = new SubTask("Решить задачу", "Задача  номер 2", epic1ID, TaskState.IN_PROGRESS);
-        int subTask2ID = taskManagerTest.createSubTask(subTask2);
+        int subTask2ID = taskManagerTest.createSubTask(subTask2).orElse(-1);
 
         SubTask subTask3 = new SubTask("Решить интеграл", "Интеграл номер 3", epic1ID, TaskState.IN_PROGRESS);
-        int subTask3ID = taskManagerTest.createSubTask(subTask3);
+        int subTask3ID = taskManagerTest.createSubTask(subTask3).orElse(-1);
 
         taskManagerTest.getEpicByID(epic1ID);
         taskManagerTest.getSubTaskByID(subTask1ID);

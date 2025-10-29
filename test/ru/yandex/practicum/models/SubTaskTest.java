@@ -21,8 +21,8 @@ class SubTaskTest {
     @Test
     void equalsTest() {
 
-        SubTask subTask1 = taskManagerTest.getSubTaskByID(2);
-        SubTask subTask2 = taskManagerTest.getSubTaskByID(2);
+        SubTask subTask1 = taskManagerTest.getSubTaskByID(2).orElse(null);
+        SubTask subTask2 = taskManagerTest.getSubTaskByID(2).orElse(null);
         assertEquals(subTask1, subTask2, "Не совпадают");
     }
 }

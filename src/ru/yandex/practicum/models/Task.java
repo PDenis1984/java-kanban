@@ -1,11 +1,16 @@
 package ru.yandex.practicum.models;
 
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Task {
     protected int iD;
     protected String name;
     protected String description; // Описание может изменяться
     protected TaskState state; // Статус должен изменяться
+    protected LocalDateTime startTime;
+    protected Duration duration;
 
     public Task(String cName, String cDescription, TaskState cState) {
 
@@ -53,6 +58,36 @@ public class Task {
     public void setState(TaskState mState) {
 
         this.state = mState;
+    }
+
+    public LocalDateTime getStartTime() {
+
+        return this.startTime;
+    }
+
+    public void setStartTime(LocalDateTime starTime) {
+
+        this.startTime = starTime;
+    }
+
+    public LocalDateTime getEndTime() {
+
+        if (this.getStartTime() != null) {
+            return this.startTime.plusMinutes(duration.toMinutes());
+        } else {
+            return null;
+        }
+    }
+
+    public void setDuration(Duration mDuration) {
+
+        this.duration = mDuration;
+    }
+
+
+    public Duration getDuration() {
+
+        return this.duration;
     }
 
     @Override

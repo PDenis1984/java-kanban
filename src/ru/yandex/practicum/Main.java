@@ -1,15 +1,22 @@
 package ru.yandex.practicum;
 
 import ru.yandex.practicum.intf.TaskManagerIntf;
-import ru.yandex.practicum.models.*;
-import ru.yandex.practicum.services.Managers;
+import ru.yandex.practicum.models.Epic;
+import ru.yandex.practicum.models.SubTask;
+import ru.yandex.practicum.models.Task;
+import ru.yandex.practicum.models.TaskState;
+import ru.yandex.practicum.services.FileBackedTaskManager;
+
+import java.io.File;
 
 public class Main {
 
     public static void main(String[] args) {
 
         System.out.println("Поехали!");
-        TaskManagerIntf taskManager = Managers.getManager(ManagersType.InFile);
+        FileBackedTaskManager taskManager = new FileBackedTaskManager("tasks.txt");
+        taskManager = FileBackedTaskManager.loadFromFile(new File("tasks.txt"));
+        taskManager.save();
         fillTasks(taskManager);
 
         System.out.println("Task1 : "  + taskManager.getTaskByID(1).toString());
@@ -26,21 +33,22 @@ public class Main {
     public static void fillTasks(TaskManagerIntf taskManager) {
 
         Task task0 = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
-        int task0ID = taskManager.createTask(task0);
+
+
         Task task1 = new Task("Починить дверь", "Вставить глазок и замок", TaskState.NEW);
-        int task1ID = taskManager.createTask(task1);
+        int task1ID = taskManager.createTask(task1).orElse(-1);
 
         Epic epic2 = new Epic("Подготовка к зачету", "Выучить необходимые параграфы, решить задачи, написать шпаргалки");
         int epic2ID = taskManager.createEpic(epic2);
 
         SubTask subtask3 = new SubTask("Изучение параграфа 1", "Страница 1", epic2.getID(), TaskState.NEW);
-        int subTask3ID = taskManager.createSubTask(subtask3);
+        int subTask3ID = taskManager.createSubTask(subtask3).orElse(-1);
 
         SubTask subTask4 = new SubTask("Решить задачу", "Задача  номер 2", epic2ID, TaskState.IN_PROGRESS);
-        int subTask4ID = taskManager.createSubTask(subTask4);
+        int subTask4ID = taskManager.createSubTask(subTask4).orElse(-1);
 
         SubTask subTask5 = new SubTask("Решить интеграл", "Интеграл номер 3", epic2ID, TaskState.IN_PROGRESS);
-        int subTask5ID = taskManager.createSubTask(subTask5);
+        int subTask5ID = taskManager.createSubTask(subTask5).orElse(-1);
 
 
         Epic epic6 = new Epic("Приготовить обед", "Комплексный обед");

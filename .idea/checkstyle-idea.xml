@@ -2,16 +2,20 @@
 <project version="4">
   <component name="CheckStyle-IDEA" serialisationVersion="2">
     <checkstyleVersion>11.0.1</checkstyleVersion>
-    <scanScope>JavaOnly</scanScope>
+    <scanScope>JavaOnlyWithTests</scanScope>
     <suppressErrors>true</suppressErrors>
     <copyLibs>true</copyLibs>
     <option name="thirdPartyClasspath" />
-    <option name="activeLocationIds" />
+    <option name="activeLocationIds">
+      <option value="03819b42-138e-4e72-8b23-2bf37c6d74f9" />
+      <option value="10e06d50-c009-4171-9f78-7ce9988292ab" />
+    </option>
     <option name="locations">
       <list>
         <ConfigurationLocation id="bundled-sun-checks" type="BUNDLED" scope="All" description="Sun Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="bundled-google-checks" type="BUNDLED" scope="All" description="Google Checks">(bundled)</ConfigurationLocation>
         <ConfigurationLocation id="10e06d50-c009-4171-9f78-7ce9988292ab" type="LOCAL_FILE" scope="All" description="Practicum">$PROJECT_DIR$/../../../CheckStyle/checkstyle.xml</ConfigurationLocation>
+        <ConfigurationLocation id="03819b42-138e-4e72-8b23-2bf37c6d74f9" type="LOCAL_FILE" scope="All" description="PracticumCheckStyle">$PROJECT_DIR$/../../../../CheckStyle/checkstyle.xml</ConfigurationLocation>
       </list>
     </option>
   </component>
