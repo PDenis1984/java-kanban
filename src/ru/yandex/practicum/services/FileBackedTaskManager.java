@@ -210,7 +210,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
                 int subTaskID = subTask.getID();
                 int epicID = subTask.getEpicID();
-                fBTManager.getEpicByID(epicID).ifPresent(x -> x.addSubTask(subTaskID));
+                fBTManager.epicList.get(epicID).addSubTask(subTaskID);
 
             }
             for (Epic epic : fBTManager.getAllEpic()) {

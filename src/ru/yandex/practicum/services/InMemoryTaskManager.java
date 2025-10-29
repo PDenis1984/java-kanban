@@ -254,7 +254,9 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                 for (Integer subTaskNumber : subTaskList.keySet()) {
 
                     inMemoryHistoryManager.remove(subTaskNumber);
+                    prioritizeTasks.remove(subTaskList.get(subTaskNumber));
                 }
+
                 subTaskList.clear(); // Все сабтаски принадлежат эпикам - потому удаляем их все
 
                 for (Integer epicNumber : epicList.keySet()) {
@@ -322,7 +324,9 @@ public class InMemoryTaskManager implements TaskManagerIntf {
             if (!checkTaskOverlap(mTask)) {
 
                 taskList.put(mTask.getID(), mTask);
+                prioritizeTasks.remove(mTask);
                 if (mTask.getStartTime() != null) {
+
                     addPrioritizeTask(mTask);
                 }
             } else {
@@ -340,6 +344,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         if (subTaskList.containsKey(mSubTask.getID())) {
             if (mSubTask.getEpicID() == etalonSubTask.getEpicID()) {
 
+                prioritizeTasks.remove(mSubTask);
                 if (!checkTaskOverlap(mSubTask)) {
 
                     subTaskList.put(mSubTask.getID(), mSubTask);
@@ -442,6 +447,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         //то это непересекающаяся задача. если есть хоты бы одно исключение - то задача пересекается. Дл startTimer == null _ всегда нет пересейчейн
 
         return (mTask.getStartTime() != null) && (!prioritizeTasks.stream()
+                .filter(task -> task.equals(mTask))
                 .allMatch(task -> (mTask.getStartTime().isBefore(task.getStartTime()) && mTask.getEndTime().isBefore(mTask.getStartTime()))
                         || (mTask.getStartTime().isAfter(task.getStartTime()))));
     }
