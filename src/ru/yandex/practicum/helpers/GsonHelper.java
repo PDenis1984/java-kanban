@@ -13,13 +13,21 @@ public class GsonHelper {
     class SubtitleListTypeToken extends TypeToken<List<Task>> {
     }
 
-    public String serializeTask(Task mTask) {
-
+    public static String serializeTask(Task mTask) {
 
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(LocalTime.class, new DateTimeSerializeAdapter());
         gsonBuilder.setPrettyPrinting();
         Gson gson = gsonBuilder.create();
         return gson.toJson(mTask);
+    }
+
+    public static  String serializeTasks(List<Task> mTasks) {
+
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(LocalTime.class, new DateTimeSerializeAdapter());
+        gsonBuilder.setPrettyPrinting();
+        Gson gson = gsonBuilder.create();
+        return gson.toJson(mTasks);
     }
 }
