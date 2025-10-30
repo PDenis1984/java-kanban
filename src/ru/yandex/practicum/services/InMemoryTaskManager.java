@@ -303,21 +303,26 @@ public class InMemoryTaskManager implements TaskManagerIntf {
 
     //Обновление
     @Override
-    public void updateEpic(Epic mEpic) {
+    public boolean updateEpic(Epic mEpic) {
 
         Epic etalonEpic = epicList.get(mEpic.getID());
         if (epicList.containsKey(mEpic.getID())) {
             if ((etalonEpic.getState() == mEpic.getState()) && ((etalonEpic.getAllSubTask()).equals(mEpic.getAllSubTask()))) {
                 epicList.put(mEpic.getID(), mEpic);
+                return true;
             } else {
-                System.out.println("Возможно обновление полей 'Name' и/или 'Description'");
-            }
 
+                System.out.println("Возможно обновление полей 'Name' и/или 'Description'");
+                return false;
+            }
+        } else  {
+            System.out.println("Не найден обновляемый эпик");
+            return false;
         }
     }
 
     @Override
-    public void updateTask(Task mTask) {
+    public boolean updateTask(Task mTask) {
 
         if (taskList.containsKey(mTask.getID())) {
 
@@ -329,16 +334,19 @@ public class InMemoryTaskManager implements TaskManagerIntf {
 
                     addPrioritizeTask(mTask);
                 }
+                return true;
             } else {
                 System.out.println("Задача не должна пересекаться по времени с существующими");
+                return false;
             }
         } else {
             System.out.println("Передан неверный номер задачи");
+            return false;
         }
     }
 
     @Override
-    public void updateSubTask(SubTask mSubTask) {
+    public boolean updateSubTask(SubTask mSubTask) {
 
         SubTask etalonSubTask = subTaskList.get(mSubTask.getID());
         if (subTaskList.containsKey(mSubTask.getID())) {
@@ -351,17 +359,23 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                     Epic epic = epicList.get(mSubTask.getEpicID());
                     recountEpicState(epic);
                     if (mSubTask.getStartTime() != null) {
+
                         addPrioritizeTask(mSubTask);
                         recountEpicTimes(epic);
                     }
+                    return true;
                 } else {
+
                     System.out.println("Подзадача не должна пересекаться по времени с существующими");
                 }
 
             } else {
                 System.out.println("Запрещено обновлять поля, кроме полей 'Name' 'Description', 'StartTime, 'Duration'");
             }
+        } else {
+            System.out.println("Подзадача не найдена");
         }
+        return false;
     }
 
     @Override

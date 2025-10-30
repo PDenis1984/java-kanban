@@ -3,6 +3,7 @@ package ru.yandex.practicum.intf;
 import ru.yandex.practicum.models.Epic;
 import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
+import ru.yandex.practicum.models.exceptioons.TaskOverlapException;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,9 +29,9 @@ public interface TaskManagerIntf {
     //Создание задач всех типов
     int createEpic(Epic mEpic);
 
-    Optional<Integer> createTask(Task mTask);
+    Optional<Integer> createTask(Task mTask) throws TaskOverlapException;
 
-    Optional<Integer> createSubTask(SubTask mSubTask);
+    Optional<Integer> createSubTask(SubTask mSubTask) throws TaskOverlapException;
 
     // Удаление
     void deleteElement(int mID, String mType);
@@ -38,11 +39,11 @@ public interface TaskManagerIntf {
     void deleteAllElements(String mType);
 
     //Обновление
-    void updateEpic(Epic mEpic);
+    boolean updateEpic(Epic mEpic);
 
-    void updateTask(Task mTask);
+    boolean updateTask(Task mTask) throws TaskOverlapException;
 
-    void updateSubTask(SubTask mSubTask);
+    boolean updateSubTask(SubTask mSubTask) throws TaskOverlapException;
 
     List<Task> getHistory();
 

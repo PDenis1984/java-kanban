@@ -4,7 +4,10 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.Endpoint;
+import ru.yandex.practicum.models.Epic;
+import ru.yandex.practicum.models.ManagersType;
 import ru.yandex.practicum.models.Task;
+import ru.yandex.practicum.services.Managers;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -14,17 +17,22 @@ import java.util.Optional;
 
 public class HttpBaseHandler implements HttpHandler { //Только работа с http - соединения, заголовки, эндпоинты и т.д
 
-    private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    private final TaskManagerIntf taskManager;
+    protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
+    protected final TaskManagerIntf taskManager;
 
     public HttpBaseHandler(TaskManagerIntf taskManager) {
 
         this.taskManager = taskManager;
     }
 
+    public HttpBaseHandler() {
+
+        this.taskManager = Managers.getManager(ManagersType.InMemory);
+    }
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-        Endpoint endpoint = getEndpoint(exchange.getRequestURI().getPath(), exchange.getRequestMethod());
+        Endpoint endpoint = EndpointHelper.getEndpoint(exchange.getRequestURI().getPath(), exchange.getRequestMethod(), "tasks");
 
         switch (endpoint) {
             case GET_TASK: {
@@ -41,34 +49,6 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
 
     }
 
-    private Endpoint getEndpoint(String requestPath, String requestMethod) {
-        String[] pathParts = requestPath.split("/");
-
-        switch (pathParts[1]) {
-
-            case "tasks":
-
-                if (pathParts.length == 2 && "GET".equals(requestMethod)) {
-                    return Endpoint.GET_TASKS;
-                } else if (pathParts.length == 3) {
-
-                    return Endpoint.GET_TASK;
-                } else {
-
-                    return Endpoint.POST_TASK;
-                }
-        }
-        //        if (pathParts.length == 2 && pathParts[1].equals("tasks")) {
-//            if (requestMethod.equals("POST")) {
-//
-//                return Endpoint.POST_TASK;
-//            }
-//            return Endpoint.GET_TASK;
-//        } else if (pathParts.length == 3) {
-//
-//        }
-        return Endpoint.UNKNOWN;
-    }
 
     protected void sendText(HttpExchange exchange, String text, int httpCode) {
 
@@ -150,8 +130,32 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
             sendText(exchange, response, 200);
         } else {
 
-            sendNotFound(exchange, "Задачи с номером не найдены");
+            sendNotFound(exchange, "Задачи не найдены");
         }
+    }
+
+    public void createTask(HttpExchange exchange, Task mTask) {
+
+        Optional<Integer> optionalTaskId = taskManager.createTask(mTask);
+        if (optionalTaskId.isPresent()) {
+            sendText(exchange, optionalTaskId.get().toString(), 201);
+        } else {
+            sendServerProblem(exchange, "Не удалось создать задачу", 500);
+        }
+    }
+
+    public void updateTask(HttpExchange exchange, Task mTask) {
+
+        boolean isUpdated = taskManager.updateTask(mTask);
+        if (isUpdated) {
+            sendText(exchange, "Задача "+ mTask.getID() + " обновлена",  200);
+        } else {
+            sendNotFound(exchange, "Задача " + mTask.getID() + " не найдена");
+        }
+    }
+
+    public void createEpic(Epic mEpic) {
+
 
     }
 }
