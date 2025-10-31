@@ -21,7 +21,7 @@ public class HttpEpicHandler extends HttpBaseHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
-        System.out.println("Началась обработка запроса");
+        System.out.println("Началась обработка Эпиков");
         Endpoint endpoint = EndpointHelper.getEndpoint(exchange.getRequestURI().getPath(), exchange.getRequestMethod(), "epics");
 
         System.out.println("Получился endpoint: " + endpoint.toString());
