@@ -7,20 +7,22 @@ public class EndpointHelper {
     public static Endpoint getEndpoint(String requestPath, String requestMethod, String base) {
         String[] pathParts = requestPath.split("/");
 
-        switch (pathParts[1]) {
+        return switch (pathParts[1]) {
+            case "tasks", "epics", "subtasks" -> Endpoint.valueOf(endPointString(base, requestMethod, pathParts));
+            case "history", "prioritized" -> Endpoint.valueOf(base.toUpperCase());
+            default -> Endpoint.UNKNOWN;
+        };
+    }
 
-            case "tasks":
+    private static String endPointString(String base, String requestMethod, String[] pathParts) {
 
-                if (pathParts.length == 2 && "GET".equals(requestMethod)) {
-                    return Endpoint.GET_TASKS;
-                } else if (pathParts.length == 3) {
+        if (pathParts.length == 2 && "GET".equals(requestMethod)) {
 
-                    return Endpoint.GET_TASK;
-                } else {
+            return requestMethod + "_" + base.toUpperCase();
+        } else if (pathParts.length == 3 && "GET".equals(requestMethod)) {
 
-                    return Endpoint.POST_TASK;
-                }
+            return requestMethod + "_" + base.substring(0, base.length() - 2).toUpperCase();
         }
-        return Endpoint.UNKNOWN;
+        return "unknown";
     }
 }

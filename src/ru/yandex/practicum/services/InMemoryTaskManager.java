@@ -6,6 +6,7 @@ import ru.yandex.practicum.models.Epic;
 import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.models.TaskState;
+import ru.yandex.practicum.models.exceptioons.TaskOverlapException;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -146,7 +147,7 @@ public class InMemoryTaskManager implements TaskManagerIntf {
     }
 
     @Override
-    public Optional<Integer> createTask(Task mTask) {
+    public Optional<Integer> createTask(Task mTask) throws TaskOverlapException {
 
         if (!checkTaskOverlap(mTask)) {
             int taskID = getElementID();
@@ -157,8 +158,9 @@ public class InMemoryTaskManager implements TaskManagerIntf {
                 addPrioritizeTask(mTask);
             }
             return Optional.of(taskID);
+        } else {
+            throw new TaskOverlapException("Задача пересекается по времени с уже существующими задачами или подзадачами");
         }
-        return Optional.empty();
     }
 
     @Override
@@ -379,24 +381,37 @@ public class InMemoryTaskManager implements TaskManagerIntf {
     }
 
     @Override
+    public boolean isTaskExists(int mTaskId) {
+
+        return taskList.containsKey(mTaskId);
+    }
+
+    @Override
+    public boolean isEpicExists(int mTaskId) {
+
+        return epicList.containsKey(mTaskId);
+    }
+
+    @Override
+    public boolean isSubTaskExists(int mSubTaskId) {
+
+        return subTaskList.containsKey(mSubTaskId);
+    }
+
+    @Override
     public void printAllElements(String mType) {
 
         System.out.println("=====".repeat(5));
         switch (mType) {
             case "TASK":
-                for (Task task : taskList.values()) {
-                    System.out.println(task);
-                }
+                taskList.values().forEach(System.out::println);
                 break;
             case "EPIC":
-                for (Epic epic : epicList.values()) {
-                    System.out.println(epic);
-                }
+                epicList.values().forEach(System.out::println);
                 break;
             case "SUB_TASK":
-                for (SubTask subTask : subTaskList.values()) {
-                    System.out.println(subTask);
-                }
+                subTaskList.values().forEach(System.out::println);
+                break;
         }
         System.out.println("=====".repeat(5));
     }
@@ -455,10 +470,10 @@ public class InMemoryTaskManager implements TaskManagerIntf {
         mEpic.setDuration(duration);
     }
 
-    public boolean checkTaskOverlap(Task mTask) {
+    private boolean checkTaskOverlap(Task mTask) {
 
         // Если время начала задачи - меньше startTime и время окончания меньше startTime, а также если время начала задачи больше endTime
-        //то это непересекающаяся задача. если есть хоты бы одно исключение - то задача пересекается. Дл startTimer == null _ всегда нет пересейчейн
+        //то это непересекающаяся задача. Если есть хоты бы одно исключение - то задача пересекается. Для startTimer == null - всегда нет пересечений
 
         return (mTask.getStartTime() != null) && (!prioritizeTasks.stream()
                 .filter(task -> task.equals(mTask))

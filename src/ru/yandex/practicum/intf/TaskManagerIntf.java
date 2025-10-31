@@ -50,4 +50,10 @@ public interface TaskManagerIntf {
     void printAllElements(String taskType);
 
     List<Task> getPrioritizeTasks();
+
+    boolean isTaskExists(int mTaskId);
+
+    boolean isEpicExists(int mEpicId);
+
+    boolean isSubTaskExists(int mSubTaskId);
 }

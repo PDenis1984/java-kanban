@@ -4,9 +4,9 @@ import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.Endpoint;
-import ru.yandex.practicum.models.Epic;
 import ru.yandex.practicum.models.ManagersType;
 import ru.yandex.practicum.models.Task;
+import ru.yandex.practicum.models.exceptioons.TaskOverlapException;
 import ru.yandex.practicum.services.Managers;
 
 import java.io.IOException;
@@ -14,6 +14,8 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
+
+import static ru.yandex.practicum.models.Endpoint.DELETE_TASK;
 
 public class HttpBaseHandler implements HttpHandler { //Только работа с http - соединения, заголовки, эндпоинты и т.д
 
@@ -32,15 +34,54 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+
         Endpoint endpoint = EndpointHelper.getEndpoint(exchange.getRequestURI().getPath(), exchange.getRequestMethod(), "tasks");
 
         switch (endpoint) {
             case GET_TASK: {
-                getTask(exchange, 10);
+
+                try {
+
+                    int taskId = Integer.parseInt(exchange.getRequestURI().getPath().split("/")[2]);
+                    getTask(exchange, taskId);
+                } catch (NumberFormatException numberFormatException) {
+
+                    String response = "Переданный идентификатор задачи - не число";
+                    System.out.println(response);
+                    sendNotFound(exchange, response);
+                }
+                break;
+            }
+            case GET_TASKS: {
+
+                getTasks(exchange);
                 break;
             }
             case POST_TASK: {
-                System.out.println("Run POST TASK ");
+
+                String taskString = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
+                Task task = GsonHelper.deserializeTask(taskString);
+                try {
+                    createTask(exchange, task);
+
+                } catch (TaskOverlapException taskOverlapException) {
+
+                    String response = "Задача пересекается по времени с другими задачами или подзадачами";
+                    System.out.println(response);
+                    sendHasInteractions(exchange, response);
+                }
+
+            }
+
+            case DELETE_TASK: {
+
+                try {
+                    int taskId = Integer.parseInt(exchange.getRequestURI().getPath().split("/")[2]);
+                    deleteTask(exchange, taskId);
+                } catch (NumberFormatException numberFormatException) {
+                    String response = "Переданный идентификатор задачи - не число";
+                    sendNotFound(exchange, response);
+                }
                 break;
             }
             default:
@@ -78,7 +119,7 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
         }
     }
 
-    public void sendHasInteractions(HttpExchange exchange, String text, short httpCode) {
+    public void sendHasInteractions(HttpExchange exchange, String text) {
 
         try {
             byte[] resp = text.getBytes(StandardCharsets.UTF_8);
@@ -124,37 +165,49 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
     private void getTasks(HttpExchange exchange) {
 
         List<Task> taskList = taskManager.getAllTasks();
-        if (!taskList.isEmpty()) {
+        String response = GsonHelper.serializeTasks(taskList);
+        sendText(exchange, response, 200);
 
-            String response = GsonHelper.serializeTasks(taskList);
-            sendText(exchange, response, 200);
-        } else {
-
-            sendNotFound(exchange, "Задачи не найдены");
-        }
     }
 
     public void createTask(HttpExchange exchange, Task mTask) {
 
-        Optional<Integer> optionalTaskId = taskManager.createTask(mTask);
-        if (optionalTaskId.isPresent()) {
-            sendText(exchange, optionalTaskId.get().toString(), 201);
-        } else {
-            sendServerProblem(exchange, "Не удалось создать задачу", 500);
+        try {
+            Optional<Integer> optionalTaskId = taskManager.createTask(mTask);
+            if (optionalTaskId.isPresent()) {
+                sendText(exchange, optionalTaskId.get().toString(), 201);
+            } else {
+                sendServerProblem(exchange, "Не удалось создать задачу", 500);
+            }
+        } catch (TaskOverlapException taskOverlapException) {
+            String response = "Не удалось создать задачу: " + mTask.toString() + " .Причина: " + taskOverlapException.getMessage();
+            System.out.println();
+            sendHasInteractions(exchange, response);
         }
     }
 
     public void updateTask(HttpExchange exchange, Task mTask) {
 
-        boolean isUpdated = taskManager.updateTask(mTask);
-        if (isUpdated) {
-            sendText(exchange, "Задача "+ mTask.getID() + " обновлена",  200);
-        } else {
-            sendNotFound(exchange, "Задача " + mTask.getID() + " не найдена");
+        if (taskManager.isTaskExists(mTask.getID())) {
+            try {
+                boolean isUpdated = taskManager.updateTask(mTask);
+                if (isUpdated) {
+                    sendText(exchange, "Задача " + mTask.getID() + " обновлена", 200);
+                } else {
+                    sendNotFound(exchange, "Задача " + mTask.getID() + " не найдена");
+                }
+            } catch (TaskOverlapException taskOverlapException) {
+                String response = "Не удалось обновить задачу " + mTask.getID() + ". Причина? " + taskOverlapException.getMessage();
+                System.out.println(response);
+                sendHasInteractions(exchange, response);
+            }
+       } else {
+            createTask(exchange, mTask);
         }
     }
 
-    public void createEpic(Epic mEpic) {
+
+    public void deleteTask(HttpExchange exchange, int mTaskId) {
 
 
     }
