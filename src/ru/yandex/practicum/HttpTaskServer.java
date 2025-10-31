@@ -48,9 +48,11 @@ public class HttpTaskServer {
     public static void main(String[] args) throws IOException {
 
         TaskManagerIntf taskManager = Managers.getManager(ManagersType.InMemory);
+        fillTasks(taskManager);
         HttpTaskServer httpTaskServer = new HttpTaskServer(taskManager,"");
         HttpServer httpServer = httpTaskServer.startServer();
-        fillTasks(taskManager);
+
+        System.out.println("endProcess");
         //httpTaskServer.stopServer(httpServer);
     }
 
@@ -58,7 +60,7 @@ public class HttpTaskServer {
 
         Task task0 = new Task("Сходить в магазин", "За хлебом", TaskState.IN_PROGRESS);
 
-
+        int task0Id = taskManager.createTask(task0).orElse(-1);
         Task task1 = new Task("Починить дверь", "Вставить глазок и замок", TaskState.NEW);
         int task1ID = taskManager.createTask(task1).orElse(-1);
 

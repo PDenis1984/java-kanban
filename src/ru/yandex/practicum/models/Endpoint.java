@@ -10,7 +10,7 @@ public enum Endpoint {
     POST_EPIC,
     DELETE_EPIC,
     GET_SUBTASK,
-    POST,SUBTASK,
+    POST_SUBTASK,
     DELETE_SUBTASK,
     HISTORY,
     PRIORITIZE,

@@ -2,25 +2,42 @@ package ru.yandex.practicum.helpers;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class DateTimeSerializeAdapter extends TypeAdapter<LocalTime> {
+public class DateTimeSerializeAdapter extends TypeAdapter<LocalDateTime> {
 
-    private final DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
+    private final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
 
-    @Override
-    public void write(JsonWriter jsWriter, LocalTime lDateTime) throws IOException {
-        jsWriter.value(lDateTime.format(timeFormatter));
-    }
 
-    @Override
-    public LocalTime read(JsonReader jsReader) throws IOException {
+        @Override
+        public void write(JsonWriter out, LocalDateTime value) throws IOException {
+            if (value == null) {
+                out.nullValue();
+            } else {
+                out.value(DATE_TIME_FORMATTER.format(value));
+            }
+        }
 
-        return LocalTime.parse(jsReader.nextString(), timeFormatter);
-    }
+        @Override
+        public LocalDateTime read(JsonReader in) throws IOException {
+            if (in.peek() == JsonToken.NULL) {
+                in.nextNull();
+                return null;
+            }
+
+            String value = in.nextString();
+
+            // Обрабатываем пустую строку
+            if (value == null || value.trim().isEmpty()) {
+                return null;
+            }
+
+            return LocalDateTime.parse(value, DATE_TIME_FORMATTER);
+        }
 
 }

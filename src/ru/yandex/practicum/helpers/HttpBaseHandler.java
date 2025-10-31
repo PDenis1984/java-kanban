@@ -15,8 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Optional;
 
-import static ru.yandex.practicum.models.Endpoint.DELETE_TASK;
-
 public class HttpBaseHandler implements HttpHandler { //Только работа с http - соединения, заголовки, эндпоинты и т.д
 
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
@@ -35,8 +33,11 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
+
+        System.out.println("Началась обработка запроса");
         Endpoint endpoint = EndpointHelper.getEndpoint(exchange.getRequestURI().getPath(), exchange.getRequestMethod(), "tasks");
 
+        System.out.println("Получился endpoint: " + endpoint.toString());
         switch (endpoint) {
             case GET_TASK: {
 
@@ -70,14 +71,14 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
                     System.out.println(response);
                     sendHasInteractions(exchange, response);
                 }
-
+                break;
             }
 
             case DELETE_TASK: {
 
                 try {
                     int taskId = Integer.parseInt(exchange.getRequestURI().getPath().split("/")[2]);
-                    deleteTask(exchange, taskId);
+                    deleteTask(exchange, taskId, "TASK");
                 } catch (NumberFormatException numberFormatException) {
                     String response = "Переданный идентификатор задачи - не число";
                     sendNotFound(exchange, response);
@@ -86,8 +87,8 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
             }
             default:
                 sendNotFound(exchange, "Такого эндпоинта не существует");
+                break;
         }
-
     }
 
 
@@ -101,7 +102,7 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
             exchange.close();
         } catch (IOException ioException) {
             System.out.println("Произошла ошибка: " + ioException.getMessage());
-            sendServerProblem(exchange, "Внутренняя ошибка сервера", 500);
+            sendServerProblem(exchange, "Внутренняя ошибка сервера");
         }
     }
 
@@ -115,7 +116,7 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
             exchange.close();
         } catch (IOException ioException) {
             System.out.println("Произошла ошибка: " + ioException.getMessage());
-            sendServerProblem(exchange, "Внутренняя ошибка сервера", 500);
+            sendServerProblem(exchange, "Внутренняя ошибка сервера");
         }
     }
 
@@ -129,11 +130,11 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
             exchange.close();
         } catch (IOException ioException) {
             System.out.println("Произошла ошибка: " + ioException.getMessage());
-            sendServerProblem(exchange, "Внутренняя ошибка сервера", 500);
+            sendServerProblem(exchange, "Внутренняя ошибка сервера");
         }
     }
 
-    public void sendServerProblem(HttpExchange exchange, String text, int httpCode) {
+    public void sendServerProblem(HttpExchange exchange, String text) {
 
         try {
             byte[] resp = text.getBytes(StandardCharsets.UTF_8);
@@ -155,7 +156,8 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
         Optional<Task> optTask = taskManager.getTaskByID(mId);
         if (optTask.isPresent()) {
 
-            sendText(exchange, GsonHelper.serializeTask(optTask.get()), 200);
+            String response = GsonHelper.serializeTask(optTask.get());
+            sendText(exchange, response, 200);
         } else {
 
             sendNotFound(exchange, "Задача с номером " + mId + " не найдена");
@@ -177,7 +179,7 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
             if (optionalTaskId.isPresent()) {
                 sendText(exchange, optionalTaskId.get().toString(), 201);
             } else {
-                sendServerProblem(exchange, "Не удалось создать задачу", 500);
+                sendServerProblem(exchange, "Не удалось создать задачу");
             }
         } catch (TaskOverlapException taskOverlapException) {
             String response = "Не удалось создать задачу: " + mTask.toString() + " .Причина: " + taskOverlapException.getMessage();
@@ -201,15 +203,26 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
                 System.out.println(response);
                 sendHasInteractions(exchange, response);
             }
-       } else {
+        } else {
             createTask(exchange, mTask);
         }
     }
 
 
-    public void deleteTask(HttpExchange exchange, int mTaskId) {
+    public void deleteTask(HttpExchange exchange, int mTaskId, String mType) {
 
+        if (taskManager.isSubTaskExists(mTaskId)) {
+            try {
+                taskManager.deleteElement(mTaskId, mType);
+            } catch (Exception exception) {
+                exception.printStackTrace();
+                sendServerProblem(exchange, "Не удалось удалить задачу : " + mTaskId + exception.getMessage());
+            }
 
+        } else {
+            sendNotFound(exchange, "Задача " + mTaskId + " не найдена");
+
+        }
     }
 }
 
