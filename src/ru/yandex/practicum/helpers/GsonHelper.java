@@ -30,7 +30,7 @@ public class GsonHelper {
         }
     }
 
-    public static String serializeTasks(List<Task> mTasks) {
+    public static String serializeTasks(List<? extends  Task> mTasks) {
 
         try {
             Gson gson = buildGson();

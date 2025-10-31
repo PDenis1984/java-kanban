@@ -4,6 +4,7 @@ package ru.yandex.practicum;
 import com.sun.net.httpserver.HttpServer;
 import ru.yandex.practicum.helpers.HttpBaseHandler;
 import ru.yandex.practicum.helpers.HttpEpicHandler;
+import ru.yandex.practicum.helpers.HttpSubTaskHandler;
 import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.*;
 import ru.yandex.practicum.services.Managers;
@@ -34,7 +35,7 @@ public class HttpTaskServer {
         HttpServer httpServer = HttpServer.create(new InetSocketAddress(bindAddress, HTTP_PORT), 0);
         httpServer.createContext("/tasks", new HttpBaseHandler(taskManager));
         httpServer.createContext("/epics", new HttpEpicHandler(taskManager));
-        httpServer.createContext("/subtasks", new HttpBaseHandler(taskManager));
+        httpServer.createContext("/subtasks", new HttpSubTaskHandler(taskManager));
         httpServer.start();
         return httpServer;
 
@@ -79,6 +80,12 @@ public class HttpTaskServer {
 
         Epic epic6 = new Epic("Приготовить обед", "Комплексный обед");
         int epic6ID = taskManager.createEpic(epic6);
+
+        Task task11 = new Task("Починить дверь11", "Вставить глазок и замок11", TaskState.IN_PROGRESS);
+        int task11ID = taskManager.createTask(task11).orElse(-1);
+
+        Task task12 = new Task("Починить дверь12", "Вставить глазок и замок12", TaskState.DONE);
+        int task12ID = taskManager.createTask(task12).orElse(-1);
 
     }
 }

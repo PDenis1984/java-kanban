@@ -63,8 +63,13 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
                 String taskString = new String(exchange.getRequestBody().readAllBytes(), DEFAULT_CHARSET);
                 Task task = GsonHelper.deserializeTask(taskString);
                 try {
-                    createTask(exchange, task);
-
+                    if (task != null) {
+                        if (task.getID() == null) {
+                            createTask(exchange, task);
+                        } else {
+                            updateTask(exchange, task);
+                        }
+                    }
                 } catch (TaskOverlapException taskOverlapException) {
 
                     String response = "Задача пересекается по времени с другими задачами или подзадачами";
@@ -79,6 +84,7 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
                 try {
                     int taskId = Integer.parseInt(exchange.getRequestURI().getPath().split("/")[2]);
                     deleteTask(exchange, taskId, "TASK");
+                    sendText(exchange, "Задача " + taskId + "Удалена", 200);
                 } catch (NumberFormatException numberFormatException) {
                     String response = "Переданный идентификатор задачи - не число";
                     sendNotFound(exchange, response);
@@ -194,7 +200,7 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
             try {
                 boolean isUpdated = taskManager.updateTask(mTask);
                 if (isUpdated) {
-                    sendText(exchange, "Задача " + mTask.getID() + " обновлена", 200);
+                    sendText(exchange, "Задача " + mTask.getID() + " обновлена", 201);
                 } else {
                     sendNotFound(exchange, "Задача " + mTask.getID() + " не найдена");
                 }
@@ -211,7 +217,7 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
 
     public void deleteTask(HttpExchange exchange, int mTaskId, String mType) {
 
-        if (taskManager.isSubTaskExists(mTaskId)) {
+        if (taskManager.isSubTaskExists(mTaskId) || taskManager.isTaskExists(mTaskId) || taskManager.isEpicExists(mTaskId) ) {
             try {
                 taskManager.deleteElement(mTaskId, mType);
             } catch (Exception exception) {

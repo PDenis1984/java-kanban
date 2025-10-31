@@ -5,7 +5,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class Task {
-    protected int iD;
+    protected Integer iD;
     protected String name;
     protected String description; // Описание может изменяться
     protected TaskState state; // Статус должен изменяться
@@ -19,12 +19,12 @@ public class Task {
         this.state = cState;
     }
 
-    public int getID() {
+    public Integer getID() {
 
         return this.iD;
     }
 
-    public void setID(int iD) {
+    public void setID(Integer iD) {
 
         this.iD = iD;
     }

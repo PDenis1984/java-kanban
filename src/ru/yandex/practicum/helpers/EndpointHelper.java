@@ -42,7 +42,11 @@ public class EndpointHelper {
 
             String response = requestMethod + "_" + base.substring(0, base.length() - 1).toUpperCase();
             return response;
+        } else if (pathParts.length == 3 && "DELETE".equals(requestMethod)) {
+            String response = requestMethod + "_" + base.substring(0, base.length() - 1).toUpperCase();
+            return response;
         }
-        return "unknown";
+
+        return "unknown".toUpperCase();
     }
 }
