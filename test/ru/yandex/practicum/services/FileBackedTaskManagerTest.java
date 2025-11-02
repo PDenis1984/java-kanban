@@ -134,7 +134,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest {
     void isTimeOverlapFound() {
 
         Task task = new Task("Долгая по времени задача", "Долгая длится больше трех дней", TaskState.IN_PROGRESS);
-        LocalDateTime startTime = LocalDateTime.parse("2024-10-12 12:10:30.000", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        LocalDateTime startTime = LocalDateTime.parse("2024-10-12T12:10:30.000", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         task.setStartTime(startTime);
         task.setDuration(Duration.ofMinutes(4320)); //Три дня
         fileBackedTaskManager.createTask(task);
