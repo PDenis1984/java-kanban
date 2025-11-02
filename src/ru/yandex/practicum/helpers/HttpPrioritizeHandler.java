@@ -2,6 +2,7 @@ package ru.yandex.practicum.helpers;
 
 import com.sun.net.httpserver.HttpExchange;
 import ru.yandex.practicum.intf.TaskManagerIntf;
+import ru.yandex.practicum.models.Endpoint;
 import ru.yandex.practicum.models.ManagersType;
 import ru.yandex.practicum.models.Task;
 import ru.yandex.practicum.services.Managers;
@@ -28,8 +29,15 @@ public class HttpPrioritizeHandler extends HttpBaseHandler {
     public void handle(HttpExchange exchange) throws IOException {
 
         System.out.println("Началась обработка Списка Задач с приоритетами");
-        getPrioritize(exchange);
-
+        Endpoint endpoint = EndpointHelper.getEndpoint(exchange.getRequestURI().getPath(), exchange.getRequestMethod(), "prioritized");
+        switch (endpoint) {
+            case GET_PRIORITIZED:
+                getPrioritize(exchange);
+                break;
+            default:
+                sendNotFound(exchange, "Такого эндпоинта не существует");
+                break;
+        }
     }
 
     private void getPrioritize(HttpExchange exchange) {

@@ -2,11 +2,11 @@ package ru.yandex.practicum.helpers;
 
 import com.google.gson.TypeAdapter;
 import com.google.gson.stream.JsonReader;
-import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.time.format.DateTimeParseException;
 
 public class DurationSerializeAdapter extends TypeAdapter<Duration> {
     @Override
@@ -20,10 +20,15 @@ public class DurationSerializeAdapter extends TypeAdapter<Duration> {
 
     @Override
     public Duration read(JsonReader jsReader) throws IOException {
-        if (jsReader.peek() == JsonToken.NULL) {
-            jsReader.nextNull();
-            return null;
+        String durationStr = jsReader.nextString();
+
+        try {
+            long minutes = Long.parseLong(durationStr);
+            return Duration.ofMinutes(minutes);
+        } catch (NumberFormatException e) {
+            throw new DateTimeParseException(
+                    "Duration must be a number representing minutes",
+                    durationStr, 0);
         }
-        return Duration.parse(jsReader.nextString());
     }
 }

@@ -3,7 +3,6 @@ package ru.yandex.practicum.helpers;
 import com.sun.net.httpserver.HttpExchange;
 import ru.yandex.practicum.intf.TaskManagerIntf;
 import ru.yandex.practicum.models.Endpoint;
-import ru.yandex.practicum.models.Epic;
 import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.exceptioons.TaskOverlapException;
 
@@ -22,8 +21,8 @@ public class HttpSubTaskHandler extends HttpBaseHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
 
-        System.out.println("Началась обработка Эпиков");
-        Endpoint endpoint = EndpointHelper.getEndpoint(exchange.getRequestURI().getPath(), exchange.getRequestMethod(), "epics");
+        System.out.println("Началась обработка Подзадач");
+        Endpoint endpoint = EndpointHelper.getEndpoint(exchange.getRequestURI().getPath(), exchange.getRequestMethod(), "subtasks");
 
         System.out.println("Получился endpoint: " + endpoint.toString());
         switch (endpoint) {
@@ -31,8 +30,8 @@ public class HttpSubTaskHandler extends HttpBaseHandler {
 
                 try {
 
-                    int epicId = Integer.parseInt(exchange.getRequestURI().getPath().split("/")[2]);
-                    getSubTask(exchange, epicId);
+                    int subTaskId = Integer.parseInt(exchange.getRequestURI().getPath().split("/")[2]);
+                    getSubTask(exchange, subTaskId);
                 } catch (NumberFormatException numberFormatException) {
 
                     String response = "Переданный идентификатор Подзадачи - не число";
@@ -64,11 +63,11 @@ public class HttpSubTaskHandler extends HttpBaseHandler {
             case DELETE_SUBTASK: {
 
                 try {
-                    int epicId = Integer.parseInt(exchange.getRequestURI().getPath().split("/")[2]);
-                    deleteTask(exchange, epicId, "EPIC");
-                    sendText(exchange, "Эпик " + epicId + "Удален", 200);
+                    int subTaskId = Integer.parseInt(exchange.getRequestURI().getPath().split("/")[2]);
+                    deleteTask(exchange, subTaskId, "SUBTASK");
+                    sendText(exchange, "Подзадача " + subTaskId + " Удалена", 200);
                 } catch (NumberFormatException numberFormatException) {
-                    String response = "Переданный идентификатор эпика - не число";
+                    String response = "Переданный идентификатор подзадачи - не число";
                     sendNotFound(exchange, response);
                 }
                 break;
@@ -117,7 +116,10 @@ public class HttpSubTaskHandler extends HttpBaseHandler {
 
     public void updateSubTask(HttpExchange exchange, SubTask mSubTask) {
 
-        if (taskManager.isTaskExists(mSubTask.getID())) {
+        System.out.println("обновление сабтаска");
+
+        if (taskManager.isSubTaskExists(mSubTask.getID())) {
+
             try {
                 boolean isUpdated = taskManager.updateSubTask(mSubTask);
                 if (isUpdated) {
@@ -126,7 +128,7 @@ public class HttpSubTaskHandler extends HttpBaseHandler {
                     sendNotFound(exchange, "Подзадача " + mSubTask.getID() + " не найдена");
                 }
             } catch (TaskOverlapException taskOverlapException) {
-                String response = "Не удалось обновить эпик " + mSubTask.getID() + ". Причина? " + taskOverlapException.getMessage();
+                String response = "Не удалось обновить Подзадачу " + mSubTask.getID() + ". Причина: " + taskOverlapException.getMessage();
                 System.out.println(response);
                 sendHasInteractions(exchange, response);
             }

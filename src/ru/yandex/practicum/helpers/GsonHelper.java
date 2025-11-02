@@ -7,6 +7,7 @@ import ru.yandex.practicum.models.Epic;
 import ru.yandex.practicum.models.SubTask;
 import ru.yandex.practicum.models.Task;
 
+import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,15 +15,12 @@ import java.util.List;
 
 public class GsonHelper {
 
-    class TaskList extends TypeToken<List<Task>> {
-    }
-
     public static String serializeTask(Task mTask) {
 
         try {
+
             Gson gson = buildGson();
-            String result = gson.toJson(mTask);
-            return result;
+            return gson.toJson(mTask);
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -33,9 +31,9 @@ public class GsonHelper {
     public static String serializeTasks(List<? extends  Task> mTasks) {
 
         try {
+
             Gson gson = buildGson();
-            String response = gson.toJson(mTasks);
-            return response;
+            return  gson.toJson(mTasks);
         } catch (Exception exception) {
             exception.printStackTrace();
             return "";
@@ -54,8 +52,19 @@ public class GsonHelper {
 
         try {
             Gson gson = buildGson();
-            String response = gson.toJson(taskString);
             return gson.fromJson(taskString, Task.class);
+        } catch (Exception exception) {
+            exception.printStackTrace();
+            return null;
+        }
+    }
+
+    public static List<Task> deserializeTasks(String tasksString) {
+
+        try {
+            Gson gson = buildGson();
+            Type listType = new TypeToken<List<Task>>(){}.getType();
+            return gson.fromJson(tasksString, listType);
         } catch (Exception exception) {
             exception.printStackTrace();
             return null;
@@ -75,7 +84,7 @@ public class GsonHelper {
     }
 
 
-    public static SubTask deserializeSubTask (String mSubTaskString) {
+    public static SubTask deserializeSubTask(String mSubTaskString) {
 
         try {
             Gson gson = buildGson();

@@ -217,7 +217,7 @@ public class HttpBaseHandler implements HttpHandler { //Только работ�
 
     public void deleteTask(HttpExchange exchange, int mTaskId, String mType) {
 
-        if (taskManager.isSubTaskExists(mTaskId) || taskManager.isTaskExists(mTaskId) || taskManager.isEpicExists(mTaskId) ) {
+        if (taskManager.isSubTaskExists(mTaskId) || taskManager.isTaskExists(mTaskId) || taskManager.isEpicExists(mTaskId)) {
             try {
                 taskManager.deleteElement(mTaskId, mType);
             } catch (Exception exception) {

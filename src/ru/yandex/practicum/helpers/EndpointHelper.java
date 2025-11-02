@@ -28,23 +28,27 @@ public class EndpointHelper {
 
     private static String endPointString(String base, String requestMethod, String[] pathParts) {
 
+        String responseLong = requestMethod + "_" + base.toUpperCase();
+        String responseShort = requestMethod + "_" + base.substring(0, base.length() - 1).toUpperCase();
+
         if (pathParts.length == 2 && "GET".equals(requestMethod)) {
 
-            String response = requestMethod + "_" + base.toUpperCase();
-            System.out.println(response);
-            return response;
+            System.out.println(responseLong);
+            return responseLong;
         } else if (pathParts.length == 3 && "GET".equals(requestMethod)) {
 
-            String response = requestMethod + "_" + base.substring(0, base.length() - 1).toUpperCase();
-            System.out.println(response);
-            return response;
+            System.out.println(responseShort);
+            return responseShort;
         } else if (pathParts.length == 2 && "POST".equals(requestMethod)) {
 
-            String response = requestMethod + "_" + base.substring(0, base.length() - 1).toUpperCase();
-            return response;
+              return responseShort;
         } else if (pathParts.length == 3 && "DELETE".equals(requestMethod)) {
-            String response = requestMethod + "_" + base.substring(0, base.length() - 1).toUpperCase();
-            return response;
+
+
+            return responseShort;
+        } else if (pathParts.length == 3 && "POST".equals(requestMethod)) {
+
+            return responseShort;
         }
 
         return "unknown".toUpperCase();

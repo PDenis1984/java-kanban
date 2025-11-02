@@ -3,6 +3,8 @@ package ru.yandex.practicum.models;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 public class Task {
     protected Integer iD;
@@ -17,6 +19,15 @@ public class Task {
         this.name = cName;
         this.description = cDescription;
         this.state = cState;
+    }
+
+    public Task(String cName, String cDescription, TaskState cState, LocalDateTime cStartTime, Duration cDuration) {
+
+        this.name = cName;
+        this.description = cDescription;
+        this.state = cState;
+        this.startTime = cStartTime.truncatedTo(ChronoUnit.MILLIS);
+        this.duration = cDuration;
     }
 
     public Integer getID() {
@@ -67,7 +78,7 @@ public class Task {
 
     public void setStartTime(LocalDateTime starTime) {
 
-        this.startTime = starTime;
+        this.startTime = starTime.truncatedTo(ChronoUnit.MILLIS);
     }
 
     public LocalDateTime getEndTime() {
@@ -110,7 +121,7 @@ public class Task {
     @Override
     public boolean equals(Object obj) {
 
-        return this.getID() == ((Task) obj).iD;
+        return Objects.equals(this.getID(), ((Task) obj).iD);
     }
 
 }
