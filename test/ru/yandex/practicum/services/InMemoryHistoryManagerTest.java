@@ -52,6 +52,7 @@ class InMemoryHistoryManagerTest {
     void notRepeatedTaskAndEpicsAndSubTask() {
 
         Task task1 = new Task("Абсолютно новый таск", "новый таск", TaskState.IN_PROGRESS);
+        task1.setID(111);
         inHM.add(task1);
         int taskListSizeBefore = inHM.getHistory().size();
         //повторяем запись
@@ -60,6 +61,7 @@ class InMemoryHistoryManagerTest {
         assertEquals(taskListSizeBefore, taskListSizeAfter, "В список попал дубль таска");
 
         Epic epic1 = new Epic("Абсолютно новый эпик", "новый эпик");
+        epic1.setID(112);
         inHM.add(epic1);
         int epicListSizeBefore = inHM.getHistory().size();
         inHM.add(epic1);
@@ -67,6 +69,7 @@ class InMemoryHistoryManagerTest {
         assertEquals(epicListSizeBefore, epicListSizeAfter, "В список попал дубль эпика");
 
         SubTask subtask1 = new SubTask("Абсолютно новый сабтаск", "новый сабтаск", epic1.getID(), TaskState.NEW);
+        subtask1.setID(113);
         inHM.add(subtask1);
         int subTaskListSizeBefore = inHM.getHistory().size();
         inHM.add(subtask1);

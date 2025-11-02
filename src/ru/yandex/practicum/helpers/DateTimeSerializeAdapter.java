@@ -11,7 +11,7 @@ import java.time.format.DateTimeFormatter;
 
 public class DateTimeSerializeAdapter extends TypeAdapter<LocalDateTime> {
 
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss.SSS");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
 
         @Override

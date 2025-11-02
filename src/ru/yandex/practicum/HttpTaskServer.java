@@ -66,7 +66,7 @@ public class HttpTaskServer {
         httpTaskServer.startServer();
 
         System.out.println("endProcess");
-        httpTaskServer.stopServer();
+        //  httpTaskServer.stopServer();
     }
 
     public static void fillTasks(TaskManagerIntf taskManager) {

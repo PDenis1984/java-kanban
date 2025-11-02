@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class InMemoryTaskManagerTest extends TaskManagerTest {
 
-    static final String DATE_TIME_FORMATTER = "dd.MM.yyyy HH:mm:ss";
+    static final String DATE_TIME_FORMATTER = "yyyy-MM-dd'T'HH:mm:ss.SSS";
     static TaskManagerIntf taskManagerTest;
 
     @BeforeAll

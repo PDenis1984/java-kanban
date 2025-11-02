@@ -28,7 +28,6 @@ public class TaskEndpointsTest {
     TaskManagerIntf taskManagerTest = Managers.getManager(ManagersType.InMemory);
     // передаём его в качестве аргумента в конструктор HttpTaskServer
     HttpTaskServer taskServer = new HttpTaskServer(taskManagerTest);
-    //    Gson gson = HttpTaskServer.getGson();
     Gson gson;
 
     @BeforeEach
