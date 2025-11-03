@@ -1,6 +1,7 @@
 package ru.yandex.practicum.models;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +58,6 @@ public final class Epic extends Task {
 
     public void setEndTime(LocalDateTime endTime) {
 
-        this.endTime = endTime;
+        this.endTime = endTime.truncatedTo(ChronoUnit.MILLIS);
     }
 }

@@ -15,7 +15,7 @@ import java.util.Optional;
 public class FileBackedTaskManager extends InMemoryTaskManager {
 
     private static final String FILE_HEADER = "id, type, name, status, description, epic, startTime, Duration, endTime\n";
-    private static final String DATE_TIME_FORMATTER = "dd.MM.yyyy HH:mm:ss";
+
     private final String fileName;
 
     //Создание
@@ -52,24 +52,27 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     //Обновление
     @Override
-    public void updateEpic(Epic mEpic) {
+    public boolean updateEpic(Epic mEpic) {
 
-        super.updateEpic(mEpic);
+        boolean result = super.updateEpic(mEpic);
         save();
+        return result;
     }
 
     @Override
-    public void updateTask(Task mTask) {
+    public boolean updateTask(Task mTask) {
 
-        super.updateTask(mTask);
+       boolean result =  super.updateTask(mTask);
         save();
+        return result;
     }
 
     @Override
-    public void updateSubTask(SubTask mSubTask) {
+    public boolean updateSubTask(SubTask mSubTask) {
 
-        super.updateSubTask(mSubTask);
+        boolean result = super.updateSubTask(mSubTask);
         save();
+        return result;
     }
 
     // Удаление
@@ -174,7 +177,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         Task task = new Task(fileRecord[2], fileRecord[4], TaskState.valueOf(fileRecord[3]));
                         task.setID(elementID);
                         if (!"".equals(fileRecord[6])) { //Считаем, что если StartTime есть, то и Duration тоже
-                            task.setStartTime(LocalDateTime.parse(fileRecord[6], DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)));
+                            task.setStartTime(LocalDateTime.parse(fileRecord[6], DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                             task.setDuration(Duration.ofMinutes(Integer.parseInt(fileRecord[7])));
                         }
 
@@ -186,9 +189,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         epic.setID(elementID);
                         if (!"".equals(fileRecord[6])) {
 
-                            epic.setStartTime(LocalDateTime.parse(fileRecord[6], DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)));
+                            epic.setStartTime(LocalDateTime.parse(fileRecord[6], DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                             epic.setDuration(Duration.ofMinutes(Integer.parseInt(fileRecord[7])));
-                            epic.setEndTime(LocalDateTime.parse(fileRecord[8], DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)));
+                            epic.setEndTime(LocalDateTime.parse(fileRecord[8], DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                         }
                         fBTManager.epicList.put(elementID, epic);
                         break;
@@ -198,7 +201,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                         SubTask subTask = new SubTask(fileRecord[2], fileRecord[4], parentEpicID, TaskState.valueOf(fileRecord[3]));
                         subTask.setID(elementID);
                         if (!"".equals(fileRecord[6])) {
-                            subTask.setStartTime(LocalDateTime.parse(fileRecord[6], DateTimeFormatter.ofPattern(DATE_TIME_FORMATTER)));
+                            subTask.setStartTime(LocalDateTime.parse(fileRecord[6], DateTimeFormatter.ISO_LOCAL_DATE_TIME));
                             subTask.setDuration(Duration.ofMinutes(Integer.parseInt(fileRecord[7])));
                         }
                         fBTManager.subTaskList.put(elementID, subTask);
